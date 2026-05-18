@@ -1,12 +1,11 @@
-// trinity_d2d_bus.v — Cross-tile D2D bus specification stub
+// trinity_d2d_bus.v — Cross-tile D2D bus with master FSM
 // NeuronConstant canonical hardware catalog
 //
-// This module specifies the Wire A/B/C interconnect interface between
+// This module implements the Wire A/B/C interconnect interface between
 // the three TRI-1 tiles (phi-anchor, e-engine, gamma-surface).
 //
-// Status: SPECIFICATION STUB — extract full interconnect Verilog from
-//         individual tiles (d2d_holo_mesh.v) in M+1 milestone.
-//         See: github.com/gHashTag/NeuronConstant/issues/2
+// Extracted from individual tile interconnect logic per milestone M+1.
+// See: github.com/gHashTag/NeuronConstant/issues/2
 //
 // Protocol: see docs/interconnect.md
 //
@@ -51,26 +50,49 @@
 //  Per-token total:          ~15 cycles  = ~300 ns
 //
 // ============================================================
-//  TODO (M+1): Extract real Verilog from d2d_holo_mesh.v
-//              and trinity_master_fsm.v into a reusable
-//              trinity_d2d_bus module. Issue #2.
+//  Master FSM — bus_load_mode / bus_sync_strobe generation
+// ============================================================
+//
+//  States:
+//    S_IDLE  : bus idle, waiting for compute_request
+//    S_LOAD  : drive bus_load_mode=1 for LOAD_HOLD_CYCLES cycles
+//    S_SYNC  : drive bus_sync_strobe=1 for SYNC_PULSE_CYCLES cycles
+//    S_DONE  : single-cycle completion flag; return to IDLE
+//
+//  Inputs:
+//    compute_request — external master requests a compute cycle
+//      (held high for the duration of the request; FSM starts on
+//       rising edge / high level in IDLE)
+//
+//  Parameters:
+//    SYNC_PULSE_CYCLES — clocks bus_sync_strobe stays high (default 2,
+//                        per Phase 2 friend/foe timing: 2 cycles = 40 ns)
+//    LOAD_HOLD_CYCLES  — clocks bus_load_mode stays high (default 4,
+//                        per Phase 1 reset timing: 4 cycles = 80 ns)
+//
 // ============================================================
 
-// Placeholder top-level port declaration for documentation purposes.
-// Replace with real implementation when issue #2 is resolved.
+`default_nettype none
+`timescale 1ns / 1ps
 
 module trinity_d2d_bus #(
-    parameter DATA_WIDTH = 8
+    parameter DATA_WIDTH       = 8,
+    parameter SYNC_PULSE_CYCLES = 2,
+    parameter LOAD_HOLD_CYCLES  = 4
 )(
     // System
     input  wire             clk,
     input  wire             rst_n,
 
+    // Compute request from external master driver
+    // Rising edge (or high level in IDLE) triggers the bus FSM
+    input  wire             compute_request,
+
     // Wire A — LOAD_MODE (Phi master drives)
-    output wire             bus_load_mode,
+    output reg              bus_load_mode,
 
     // Wire B — SYNC_STROBE (Phi master drives)
-    output wire             bus_sync_strobe,
+    output reg              bus_sync_strobe,
 
     // Wire C — ACK (open-drain, slaves drive)
     input  wire             bus_ack_euler,   // Euler uo[0]
@@ -90,22 +112,126 @@ module trinity_d2d_bus #(
     output wire             phi_spike_in      // Phi mux input (J3)
 );
 
-    // ACK: open-drain OR (active-low)
-    assign bus_ack       = bus_ack_euler & bus_ack_gamma;
+    // -----------------------------------------------------------------------
+    // Counter width: large enough to hold LOAD_HOLD_CYCLES and
+    // SYNC_PULSE_CYCLES. We use 4 bits (max 15 cycles). If parameters are
+    // larger, increase this width. Default max is 4, well within 4 bits.
+    // -----------------------------------------------------------------------
+    localparam CNT_W = 4;
 
+    // -----------------------------------------------------------------------
+    // FSM state encoding
+    // -----------------------------------------------------------------------
+    localparam [1:0]
+        S_IDLE = 2'd0,
+        S_LOAD = 2'd1,
+        S_SYNC = 2'd2,
+        S_DONE = 2'd3;
+
+    reg [1:0]       state;
+    reg [CNT_W-1:0] cnt;
+
+    // -----------------------------------------------------------------------
+    // Master FSM — produces bus_load_mode and bus_sync_strobe
+    // -----------------------------------------------------------------------
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            state           <= S_IDLE;
+            cnt             <= {CNT_W{1'b0}};
+            bus_load_mode   <= 1'b0;
+            bus_sync_strobe <= 1'b0;
+        end else begin
+            case (state)
+
+                // ---------------------------------------------------------
+                // IDLE: wait for compute_request assertion
+                // ---------------------------------------------------------
+                S_IDLE: begin
+                    bus_load_mode   <= 1'b0;
+                    bus_sync_strobe <= 1'b0;
+                    if (compute_request) begin
+                        // Phase 4: assert LOAD_MODE (Wire A) and start counter
+                        bus_load_mode <= 1'b1;
+                        cnt           <= {{(CNT_W-1){1'b0}}, 1'b1};
+                        state         <= S_LOAD;
+                    end
+                end
+
+                // ---------------------------------------------------------
+                // LOAD: hold bus_load_mode for LOAD_HOLD_CYCLES cycles
+                // cnt counts 1..LOAD_HOLD_CYCLES (entered at cnt=1)
+                // ---------------------------------------------------------
+                S_LOAD: begin
+                    if (cnt >= LOAD_HOLD_CYCLES[CNT_W-1:0]) begin
+                        // Transition to SYNC phase: de-assert LOAD_MODE,
+                        // assert SYNC_STROBE (Wire B)
+                        bus_load_mode   <= 1'b0;
+                        bus_sync_strobe <= 1'b1;
+                        cnt             <= {{(CNT_W-1){1'b0}}, 1'b1};
+                        state           <= S_SYNC;
+                    end else begin
+                        cnt <= cnt + {{(CNT_W-1){1'b0}}, 1'b1};
+                    end
+                end
+
+                // ---------------------------------------------------------
+                // SYNC: hold bus_sync_strobe for SYNC_PULSE_CYCLES cycles
+                // ---------------------------------------------------------
+                S_SYNC: begin
+                    if (cnt >= SYNC_PULSE_CYCLES[CNT_W-1:0]) begin
+                        bus_sync_strobe <= 1'b0;
+                        cnt             <= {CNT_W{1'b0}};
+                        state           <= S_DONE;
+                    end else begin
+                        cnt <= cnt + {{(CNT_W-1){1'b0}}, 1'b1};
+                    end
+                end
+
+                // ---------------------------------------------------------
+                // DONE: single-cycle completion; return to IDLE
+                // (compute_request may still be high — wait for it to clear
+                //  before re-triggering to avoid immediate re-fire)
+                // ---------------------------------------------------------
+                S_DONE: begin
+                    bus_load_mode   <= 1'b0;
+                    bus_sync_strobe <= 1'b0;
+                    if (!compute_request) begin
+                        state <= S_IDLE;
+                    end
+                end
+
+                default: begin
+                    state           <= S_IDLE;
+                    bus_load_mode   <= 1'b0;
+                    bus_sync_strobe <= 1'b0;
+                end
+
+            endcase
+        end
+    end
+
+    // -----------------------------------------------------------------------
+    // ACK: open-drain OR (active-high: both slaves must be high → bus ACK)
+    // Matches interconnect.md Wire C semantics: Euler uo[0] AND Gamma uio[3]
+    // both high → triad ACK asserted.
+    // -----------------------------------------------------------------------
+    assign bus_ack = bus_ack_euler & bus_ack_gamma;
+
+    // -----------------------------------------------------------------------
     // Token forwarding: Phi → Euler (combinational pass-through in bus spec)
-    assign euler_token   = phi_token;
+    // -----------------------------------------------------------------------
+    assign euler_token = phi_token;
 
+    // -----------------------------------------------------------------------
     // D2D forwarding: Euler result → Gamma RX
-    assign gamma_d2d_rx  = euler_result;
+    // -----------------------------------------------------------------------
+    assign gamma_d2d_rx = euler_result;
 
+    // -----------------------------------------------------------------------
     // Spike return: Gamma → Phi
-    assign phi_spike_in  = gamma_spike_e_tx;
-
-    // bus_load_mode and bus_sync_strobe are master-driven;
-    // their logic lives in Phi's trinity_master_fsm.v.
-    // This stub leaves them undriven pending issue #2.
-    assign bus_load_mode    = 1'b0; // placeholder
-    assign bus_sync_strobe  = 1'b0; // placeholder
+    // -----------------------------------------------------------------------
+    assign phi_spike_in = gamma_spike_e_tx;
 
 endmodule
+
+`default_nettype wire
