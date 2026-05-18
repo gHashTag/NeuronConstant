@@ -1,0 +1,80 @@
+name: NeuronConstant CI
+
+# Runs on every push and PR — validates the canonical RTL catalog:
+#   1. R-SI-1 audit (no standalone `*` in synthesisable RTL)
+#   2. export_tt_project.sh smoke test for all 3 tiles
+#   3. Validates exported TT submission structure
+#
+# Closes NeuronConstant#3
+# DOI: 10.5281/zenodo.19227877 · Apache-2.0
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r_si_1:
+    name: R-SI-1 no-star audit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        tile: [phi-anchor, e-engine, gamma-surface]
+    steps:
+      - uses: actions/checkout@v4
+      - name: R-SI-1 audit — ${{ matrix.tile }}
+        run: bash common/verification/r_si_1_check.sh tiles/${{ matrix.tile }}/rtl
+
+  export_tt:
+    name: Export TT project
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        tile: [phi-anchor, e-engine, gamma-surface]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Export ${{ matrix.tile }}
+        run: bash scripts/export_tt_project.sh ${{ matrix.tile }} /tmp/export/${{ matrix.tile }}
+      - name: Validate exported structure — info.yaml
+        run: test -f /tmp/export/${{ matrix.tile }}/info.yaml
+      - name: Validate exported structure — src/
+        run: |
+          test -d /tmp/export/${{ matrix.tile }}/src
+          # at least one .v file present
+          count=$(find /tmp/export/${{ matrix.tile }}/src -name '*.v' | wc -l)
+          test "$count" -gt 0
+      - name: Validate exported structure — test/
+        run: test -d /tmp/export/${{ matrix.tile }}/test
+      - name: Validate exported structure — docs/
+        run: test -d /tmp/export/${{ matrix.tile }}/docs
+      - name: Show exported tree
+        run: |
+          echo "=== /tmp/export/${{ matrix.tile }} ==="
+          find /tmp/export/${{ matrix.tile }} -maxdepth 2 -type f | sort
+      - name: Upload export artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: export-${{ matrix.tile }}
+          path: /tmp/export/${{ matrix.tile }}
+          retention-days: 7
+
+  summary:
+    name: NeuronConstant CI summary
+    runs-on: ubuntu-latest
+    needs: [r_si_1, export_tt]
+    if: always()
+    steps:
+      - name: Aggregate
+        run: |
+          echo "R-SI-1: ${{ needs.r_si_1.result }}"
+          echo "Export TT: ${{ needs.export_tt.result }}"
+          if [[ "${{ needs.r_si_1.result }}" != "success" ]] || [[ "${{ needs.export_tt.result }}" != "success" ]]; then
+            exit 1
+          fi

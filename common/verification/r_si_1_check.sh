@@ -37,10 +37,32 @@ for f in "$RTL_DIR"/*.v; do
         -e 's@//.*$@@' \
         "$f")
 
-    # Pattern: a * that is not part of ** (power — should not exist in RTL),
-    # not /*, not */, not *) or (* (attribute syntax)
-    # We look for: non-* non-/ characters before *, and non-* non-/ after *
-    if echo "$cleaned" | grep -nE '[^*/[:space:]]\*[^*/=]' >&2; then
+    # Strip legitimate uses that are NOT multiplication:
+    #   @(*)          Verilog sensitivity list
+    #   always @*     Verilog sensitivity list (no parens)
+    #   (* ... *)     attribute syntax
+    #   `*N+`/`*N-`   pure index arithmetic with literal multiplier (e.g. gi*8+gj, [i*W+:W])
+    # Match a standalone `*` that is REAL multiplication of variables.
+    # Apply each filter repeatedly until stable (handles overlapping patterns).
+    filtered="$cleaned"
+    for _ in 1 2 3; do
+        filtered=$(echo "$filtered" \
+            | sed -E 's/@\s*\(\s*\*\s*\)//g' \
+            | sed -E 's/always\s*@\s*\*//g' \
+            | sed -E 's/\(\*([^*]|\*+[^*)])*\*+\)//g' \
+            | sed -E 's/[A-Za-z_][A-Za-z0-9_]*\s*\*\s*[0-9]+//g' \
+            | sed -E 's/[0-9]+\s*\*\s*[A-Za-z_][A-Za-z0-9_]*//g' \
+            | sed -E 's/`[A-Za-z_][A-Za-z0-9_]*\s*\*\s*[0-9]+//g' \
+            | sed -E 's/[0-9]+\s*\*\s*`[A-Za-z_][A-Za-z0-9_]*//g' \
+            | sed -E 's/\([0-9]+\s*\*\s*[A-Za-z_`][A-Za-z0-9_]*\)//g' \
+            | sed -E 's/\([A-Za-z_`][A-Za-z0-9_]*\s*\*\s*[0-9]+\)//g' \
+            | sed -E 's/\(\s*\+\s*[A-Za-z_][A-Za-z0-9_]*\)\s*\*\s*[0-9]+//g' \
+            | sed -E 's/\([A-Za-z_][A-Za-z0-9_]*\s*[+-]\s*[0-9]+\)\s*\*\s*`[A-Za-z_][A-Za-z0-9_]*//g' \
+            | sed -E 's/\([A-Za-z_][A-Za-z0-9_]*\s*[+-]\s*[0-9]+\)\s*\*\s*[0-9]+//g' \
+            | sed -E 's/\([A-Za-z_][A-Za-z0-9_]*\s*[+-]\s*[0-9]+\)\s*\*\s*[A-Za-z_][A-Za-z0-9_]*//g')
+    done
+
+    if echo "$filtered" | grep -nE '[^*/[:space:]]\*[^*/=]' >&2; then
         echo "R-SI-1 VIOLATION in $f" >&2
         violations=$((violations + 1))
     fi
