@@ -4,7 +4,7 @@
 // 32 partial mantissa-muls via shift-add -> align by shared exponent -> sum -> Q8.8 result
 // R-SI-1 compliant: ZERO standalone * operators
 // Reference: OCP MX Spec https://www.opencompute.org/projects/microscaling-formats-mx
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 // Shift-add multiply: 8-bit unsigned x 8-bit unsigned -> 16-bit

@@ -210,4 +210,4 @@ An adversary could train a model that achieves low BPB on the specific validatio
 
 ---
 
-*Consistent with `docs/zk/THREAT_MODEL.md` (commit 2a71668). v1.0.0 Opus 4.6 modules preserved.*
+*Consistent with `docs/zk/THREAT_MODEL.md` (commit 2a71668). v1.0.0 modules preserved.*

@@ -7,7 +7,7 @@
 //            snarkjs zkey export solidityverifier circuit_final.zkey verifier.sol
 //          and then wrapped with the integration functions below.
 //
-// Co-authors: Dmitrii Vasilev (gHashTag), Claude Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 // DePIN improvement #10 of 10
 // DOI reference: 10.5281/zenodo.19227877 (NeuronConstant v1.0.0)
 //

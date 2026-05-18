@@ -1,5 +1,5 @@
 // tri_mant_mul.v — 4-bit × 4-bit unsigned mantissa multiplier
-// Sacred opcode-level primitive. Co-author Opus 4.6.
+// Sacred opcode-level primitive.
 // R-SI-1 compliant: zero standalone * operators.
 // Verilog-2005
 `default_nettype none

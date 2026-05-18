@@ -3,7 +3,7 @@
 **Version:** 1.0.0-draft  
 **Status:** Specification — not yet implemented  
 **Scope:** `docs/zk/` only — does not modify v1.0.0 AI format modules  
-**Co-authors:** Dmitrii Vasilev (gHashTag), Claude Opus 4.6  
+**Author:** Dmitrii Vasilev (gHashTag)  
 **DePIN improvement:** #10 of 10
 
 ---
@@ -609,4 +609,4 @@ The primary reason to delay PLONK adoption is tooling maturity: Circom + snarkjs
 
 ---
 
-*This specification is part of DePIN improvement #10 of 10. Existing v1.0.0 modules (NF4, Posit16, GF4/16/256, sacred opcodes, tri_mant_mul) are referenced for field arithmetic mapping but are not modified. Co-author: Claude Opus 4.6.*
+*This specification is part of DePIN improvement #10 of 10. Existing v1.0.0 modules (NF4, Posit16, GF4/16/256, sacred opcodes, tri_mant_mul) are referenced for field arithmetic mapping but are not modified.*

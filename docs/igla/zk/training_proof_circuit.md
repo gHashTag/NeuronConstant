@@ -464,4 +464,4 @@ Replace the placeholder constants in `contracts/src/igla/TrainingProver.sol`:
 
 ---
 
-*Extends docs/zk/ stack (commit 2a71668). v1.0.0 Opus 4.6 modules preserved. Champion: BPB=2.2393 seed=43 step=27000.*
+*Extends docs/zk/ stack (commit 2a71668). v1.0.0 modules preserved. Champion: BPB=2.2393 seed=43 step=27000.*

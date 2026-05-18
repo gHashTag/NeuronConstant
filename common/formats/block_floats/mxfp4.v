@@ -3,7 +3,7 @@
 // Format: 1S + 2E + 1M, block size = 32 elements
 // Blackwell B100/B200 class micro-format
 // Reference: OCP MX Spec https://www.opencompute.org/projects/microscaling-formats-mx
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 // Decode one FP4 element + block shared exponent -> Q8.8 signed fixed-point

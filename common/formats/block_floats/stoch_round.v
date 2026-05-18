@@ -6,7 +6,7 @@
 // LFSR-16: Galois LFSR, poly x^16+x^15+x^13+x^4+1 (taps 16,15,13,4)
 // Probability = fractional part / 2^drop_bits => if LFSR < threshold, round up
 // R-SI-1 compliant
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 // LFSR-16: Galois feedback polynomial 0xB400 (x^16+x^15+x^13+x^4+1)

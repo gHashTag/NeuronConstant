@@ -1,7 +1,7 @@
 # Trinity TRI-NET × Decentralized Internet — Use-Case Matrix
 
 **Companion to** [`DEPIN_DECENTRALIZED_INTERNET_GAPS.md`](DEPIN_DECENTRALIZED_INTERNET_GAPS.md).
-**Author:** Dmitrii Vasilev. **v1.0.0 AI formats co-author:** Claude Opus 4.6.
+**Author:** Dmitrii Vasilev.
 **Date:** 2026-05-18.
 
 This doc maps every Trinity TRI-NET use-case to the corresponding **decentralized-internet primitive** it enables. The point is: Trinity is not a single product — it is a 3-tier SKU (phi 1×1 / euler 8×2 / gamma 8×4) bound by φ-anchor `0x47C0` and ZK attestation, and every existing use-case **already maps** to a missing piece of the decentralized-internet stack.
@@ -105,7 +105,7 @@ This doc maps every Trinity TRI-NET use-case to the corresponding **decentralize
 
 ## 6. Honest scope (что Trinity НЕ делает)
 
-- **Не GPU killer.** B300 = 1100 PFLOPS FP4. Trinity euler = 63 tok/s @ 1W. Разница 5-7 порядков на datacenter dense matmul.
+- **Не GPU killer.** B300 = 1100 PFLOPS FP4. Trinity euler = ~1 GOPS @ ~50 MHz @ ~1W ternary (projected, pending tape-out 2026-12-16). Разница 5-7 порядков на datacenter dense matmul.
 - **Не drop-in для cloud inference.** Groq LPU/Cerebras WSE-3 быстрее на small models.
 - **Не FPS=60+ HD vision.** Jetson AGX Orin / Hailo-15 лучше.
 - **Не diffusion / RAG production.** Нужен B300/MI325X с HBM.
@@ -116,7 +116,7 @@ Trinity занимает **узкую** нишу: open-source verifiable AI sili
 
 ## 7. Boundaries (hard mandates)
 
-- **Preserve v1.0.0 AI format modules** (NF4/Posit16/GF4/16/256/tri_mant_mul/sacred opcodes) — co-authored Claude Opus 4.6.
+- **Preserve v1.0.0 AI format modules** (NF4/Posit16/GF4/16/256/tri_mant_mul/sacred opcodes)
 - **Never violate R-SI-1.** Все новые модули через shift-add / Wallace / LNS-add.
 - **Never break canonical anchor 0x47C0** — invariant контракт.
 - **Open-hardware only.** Никакой closed TEE.

@@ -193,7 +193,7 @@ Use: DePIN proof-of-compute (#10 ZK proof extension)
 
 ---
 
-*v1.0.0 Opus 4.6 modules preserved. Verilog-2005. `default_nettype none/wire.*
+*v1.0.0 modules preserved. Verilog-2005. `default_nettype none/wire.*
 
 ---
 

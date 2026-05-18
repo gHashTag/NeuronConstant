@@ -22,7 +22,7 @@ Verilog-2005. All multiplication via shift-add (R-SI-1 compliant — zero standa
 
 | File | Description |
 |------|-------------|
-| `tri_mant_mul.v` | 4×4 unsigned mantissa multiplier, shift-add. Sacred primitive. Co-author Opus 4.6. |
+| `tri_mant_mul.v` | 4×4 unsigned mantissa multiplier, shift-add. Sacred primitive. |
 | `tri_mant_mul8.v` | 8×8 unsigned mantissa multiplier, shift-add (for FP8 / Posit / bfloat16) |
 | `nf4_codec.v` | NF4 encode (nearest LUT) + decode (LUT lookup) |
 | `nf4_dot4.v` | Dot product of 4 NF4 pairs via tri_mant_mul |

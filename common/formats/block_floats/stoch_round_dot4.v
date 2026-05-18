@@ -3,7 +3,7 @@
 // on final accumulation result.
 // Uses LFSR-16 for rounding decision on wide->narrow conversion.
 // R-SI-1 compliant: uses shift_add_mul8u for all multiplications
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 // 4-element dot product: sum(a[i] * b[i]) for i=0..3

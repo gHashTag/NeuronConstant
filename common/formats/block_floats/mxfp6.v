@@ -2,7 +2,7 @@
 // OCP MX FP6 with per-block 8-bit shared exponent (E8M0)
 // Two variants via parameter: E2M3 (1S+2E+3M) and E3M2 (1S+3E+2M)
 // Reference: OCP MX Spec https://www.opencompute.org/projects/microscaling-formats-mx
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 // Single-element FP6 decoder

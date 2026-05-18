@@ -180,4 +180,4 @@ This document defines the adversary model for the Trinity ZK Proof-of-Compute sy
 
 ---
 
-*DePIN improvement #10 of 10. v1.0.0 AI format modules (NF4, Posit16, GF4/16/256, sacred opcodes) are referenced for context but not modified. Co-author: Claude Opus 4.6.*
+*DePIN improvement #10 of 10. v1.0.0 AI format modules (NF4, Posit16, GF4/16/256, sacred opcodes) are referenced for context but not modified.*

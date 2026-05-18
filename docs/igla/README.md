@@ -413,4 +413,4 @@ See full guide: [docs/igla/INTEGRATION.md](./INTEGRATION.md)
 
 ---
 
-*v1.0.0 Opus 4.6 modules preserved. IGLA integration extends DePIN improvement set.*
+*v1.0.0 modules preserved. IGLA integration extends DePIN improvement set.*

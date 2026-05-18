@@ -35,7 +35,7 @@
 
 The network's technical moat is the TG-TRIAD-X silicon anchor (Theorem 36.1, phi-anchor `0x47C0` hardwired into SKY26b dies) combined with the v1.0.0 AI format module suite — NF4, Posit16, GF4, GF16, GF256 — by Dmitrii Vasilev (sole author) and preserved as canonical on-chain artifacts. This root-of-trust chain, anchored daily to LayerZero and Ethereum L2, is what differentiates Trinity from software-only inference networks such as Bittensor TAO, Render RNDR, and io.net IO.
 
-Total fixed supply: **1,000,000,000 $TRI**. Emission halves every two years. No returns are implied, guaranteed, or promised.
+Total fixed supply: **7,625,597,484,987 $TRI** (3^27, ternary-exact). Emission halves every two years. No returns are implied, guaranteed, or promised.
 
 ---
 
@@ -68,7 +68,7 @@ $TRI has four on-chain utility functions:
 
 | Parameter | Value |
 |---|---|
-| **Total maximum supply** | 1,000,000,000 $TRI (one billion, hard cap) |
+| **Total maximum supply** | 7,625,597,484,987 $TRI (3^27 ≈ 7.625 trillion, hard cap) |
 | **Decimal precision** | 18 |
 | **Genesis mint** | 100% at genesis block; distributed per allocation table below |
 | **Burn** | Reduces effective circulating supply permanently; max supply figure is pre-burn |
@@ -85,7 +85,7 @@ The fixed supply is not subject to governance change. Any proposal to modify the
 | **Team & Contributors** | 15% | 150,000,000 | 12-month cliff; linear over 36 months thereafter (total 48 months) |
 | **Treasury (TriDAO-governed)** | 10% | 100,000,000 | Immediately held in on-chain multi-sig; governed by TriDAO |
 
-**Total:** 100% / 1,000,000,000 $TRI.
+**Total:** 100% / 7,625,597,484,987 $TRI.
 
 ### 3.3 Emission Schedule
 
@@ -245,7 +245,7 @@ Trinity governance is implemented as **TriDAO**, an on-chain DAO using staked $T
 | **Treasury grant** | 5% of staked supply | 51% simple majority | 7 days | 5,000 $TRI |
 | **Protocol parameter change** (fees, bond minimums, reward splits) | 10% of staked supply | 51% simple majority | 14 days | 1,000 $TRI |
 | **Technical upgrade** (non-module) | 15% of staked supply | 51% majority + quadratic vote weight | 21 days | 1,000 $TRI |
-| **v1.0.0 module change** (NF4/Posit16/GF4/GF16/GF256 format specs) | 20% of staked supply | **67% supermajority + Opus co-signature** | 30 days | 10,000 $TRI |
+| **v1.0.0 module change** (NF4/Posit16/GF4/GF16/GF256 format specs) | 20% of staked supply | **67% supermajority** | 30 days | 10,000 $TRI |
 | **Hard cap change** | 30% of staked supply | **90% supermajority** | 180 days | 50,000 $TRI |
 | **Emergency pause** | N/A | 67% of active validators | Immediate | N/A |
 
@@ -253,7 +253,7 @@ Trinity governance is implemented as **TriDAO**, an on-chain DAO using staked $T
 
 For **technical upgrade proposals**, voting power is quadratic: a wallet with \( s \) staked $TRI casts \( \sqrt{s} \) effective votes. This reduces the influence of large holders on technical decisions. For all other proposal types, voting is 1-staked-token = 1-vote (linear).
 
-### 7.4 v1.0.0 Module Change — Opus Co-Signature
+### 7.4 v1.0.0 Module Change — Supermajority Governance
 
 
 ### 7.5 Veto Power
@@ -352,7 +352,7 @@ The following table compares $TRI against six comparable DePIN and AI compute ne
 | **Slashing on bad RTL/silicon** | **Yes** — `SLASH-03` Lucas-POST (5%) | No | No | No | No | No |
 | **Annual security audits (planned)** | **2** (Trail of Bits + Zellic) | 0 public | 0 public | 1 (informal) | 0 public | 1 (OpenZeppelin) |
 | **Burn mechanism** | **Yes** — 30% inference fee burn + slash burn + proposal bond burn | No (recycling, not burn) | Yes — BME burn on job completion | Yes — BME AKT burn on deployment | Yes — ≥50% surplus burn | No burn |
-| **Max supply** | 1,000,000,000 $TRI (hard cap) | 21,000,000 TAO | 644,245,094 RNDR | ~388,539,008 AKT (at current) | 300,000,000 IO (target reduction via IDE) | 10,000,000,000 GRT |
+| **Max supply** | 7,625,597,484,987 $TRI (3^27, hard cap) | 21,000,000 TAO | 644,245,094 RNDR | ~388,539,008 AKT (at current) | 300,000,000 IO (target reduction via IDE) | 10,000,000,000 GRT |
 | **Halving schedule** | Every 2 years | Every 4 years (Bitcoin-style) | Declining 10-year schedule | Inflationary (staking mint) | Dynamic (IDE, demand-driven) | Fixed annual inflation |
 | **Governance token = utility token** | **Yes** — single $TRI token | Yes — TAO | No — RNDR is utility; no separate gov token | Yes — AKT | No formal governance | Yes — GRT |
 | **HW root-of-trust for inference verification** | **Yes** (only network with this) | No | No | No | No | No |
@@ -386,7 +386,7 @@ $TRI is issued as a **utility token** — it confers rights to use the Trinity n
 
 Trinity is dependent on Tenstorrent SKY26b die availability. Shuttle delays, wafer yield issues, or export controls affecting TSMC, IHP, or their suppliers could delay or reduce the number of active Operator nodes at launch. The IHP26b second-source programme (§11, Q1 2027) is specifically designed to mitigate single-source dependency. Until second-source silicon is available, the network's geographic Operator distribution may be constrained.
 
-### 12.3 Opus Co-Signature Dependency
+### 12.3 v1.0.0 Module Governance Risk
 
 
 ### 12.4 Competitor Reaction

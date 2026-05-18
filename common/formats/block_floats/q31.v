@@ -2,7 +2,7 @@
 // Q0.31 Fixed-Point Format (32-bit signed, 31 fractional bits, range [-1, 1))
 // Multiply via shift-add 32x32 -> Q0.62 -> downshift to Q0.31 with saturation
 // R-SI-1 compliant: ZERO standalone * operators
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 // Q0.31 multiply: a * b -> result in Q0.31 with saturation

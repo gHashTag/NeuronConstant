@@ -104,7 +104,7 @@ This doc maps every Trinity TRI-NET use-case to the corresponding **decentralize
 
 ## 6. Honest scope (что Trinity НЕ делает)
 
-- **Не GPU killer.** B300 = 1100 PFLOPS FP4. Trinity euler = 63 tok/s @ 1W. Разница 5-7 порядков на datacenter dense matmul.
+- **Не GPU killer.** B300 = 1100 PFLOPS FP4. Trinity euler = ~1 GOPS @ ~50 MHz @ ~1W ternary (projected, pending tape-out 2026-12-16). Разница 5-7 порядков на datacenter dense matmul.
 - **Не drop-in для cloud inference.** Groq LPU/Cerebras WSE-3 быстрее на small models.
 - **Не FPS=60+ HD vision.** Jetson AGX Orin / Hailo-15 лучше.
 - **Не diffusion / RAG production.** Нужен B300/MI325X с HBM.

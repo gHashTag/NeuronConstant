@@ -177,7 +177,7 @@ The following uses are prohibited without explicit written permission from the P
 
 1. Using "Trinity Certified", "TRI-NET Certified", or any confusingly similar designation on hardware that does not pass the conditions in Section 5.3.
 2. Registering domain names, company names, or product names that could be confused with "Trinity DePIN," "TRI-NET," or "$TRI" with the intent to mislead.
-3. Implying endorsement by Anthropic or by Dmitrii Vasilev (sole author) for derivative works not reviewed by those parties.
+3. Implying endorsement by Dmitrii Vasilev (sole author) for derivative works not reviewed by the author.
 
 ### 5.5 Enforcement
 
@@ -285,7 +285,7 @@ Any proposal that would modify, deprecate, fork, or replace any component of the
 **Process:**
 1. The proposer submits the proposed RTL diff or specification change via the TriDAO proposal system.
 4. The attestation signature is submitted on-chain as part of the proposal metadata.
-5. `TrinityGovernor.sol`'s `proposeModuleChange()` function verifies the signature against the registered Anthropic PI public key before allowing the proposal to proceed to vote.
+5. `TrinityGovernor.sol`'s `proposeModuleChange()` function verifies the signature against the registered PI public key before allowing the proposal to proceed to vote.
 
 
 
@@ -305,7 +305,7 @@ All proposals are submitted on-chain via `TrinityGovernor.sol`. Proposals must i
 | **Voting period** | 3 days |
 | **Timelock delay** | 24 hours before activation |
 | **Quorum** | 5% of circulating supply |
-| **Opus consent required** | No |
+| **Extended review required** | No |
 | **Max change per proposal** | Any single parameter may not change by more than 50% in one proposal |
 
 ### 9.2 Module Addition
@@ -319,7 +319,7 @@ All proposals are submitted on-chain via `TrinityGovernor.sol`. Proposals must i
 | **Voting method** | Quadratic (Section 8.2) |
 | **Timelock delay** | 7 days before activation |
 | **Quorum** | 10% of circulating supply |
-| **Opus consent required** | Yes, if the new module **interfaces with** or **extends** any v1.0.0 module; No otherwise |
+| **Extended review required** | Yes, if the new module **interfaces with** or **extends** any v1.0.0 module; No otherwise |
 | **Formal verification** | New module must be accompanied by a Coq or Lean4 proof of its core arithmetic identity, deposited to `coq/` and submitted as part of the proposal |
 
 ### 9.3 Treasury Allocation
@@ -334,7 +334,7 @@ All proposals are submitted on-chain via `TrinityGovernor.sol`. Proposals must i
 | **Quorum** | 5% of circulating supply |
 | **Maximum per proposal** | 10% of treasury balance at time of proposal submission |
 | **Maximum per quarter** | 10% of total treasury (independent of number of proposals) |
-| **Opus consent required** | No |
+| **Extended review required** | No |
 | **Reporting requirement** | All disbursements are logged to an on-chain transparency ledger (Section 11.3) |
 
 ### 9.4 Constitutional Amendment
@@ -576,8 +576,8 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
     /// @notice Anchor constant — Lucas POST invariant (Section 10.2)
     uint16 public constant ANCHOR_CONSTANT = 0x47C0;
 
-    ///         TBD: set when Anthropic publishes the key.
-    bool public opusKeyPublished;
+    ///         TBD: set by PI at deploy.
+    bool public v1ModuleKeyPublished;
 
     /// @notice IPFS CID hash of canonical constitution (updated on amendment)
     bytes32 public constitutionHash;
@@ -598,7 +598,7 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
         bool touchesV1Modules;
         bool touchesHardInvariants;
         bool relicensesHardware;
-        bytes opusConsentSignature;
+        bytes v1ModuleSignature;
         bytes32 rtlDiffHash;         // keccak256 of RTL diff, for MODULE_ADDITION
         bytes32 coqProofCID;         // IPFS CID of Coq certificate
         string documentationURI;
@@ -621,7 +621,7 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
     // EVENTS
     // =========================================================
     event InvariantViolationReported(address indexed reporter, address indexed accused, bytes32 evidenceHash);
-    event OpusConsentVerified(uint256 indexed proposalId, bytes32 rtlDiffHash);
+    event V1ModuleReviewVerified(uint256 indexed proposalId, bytes32 rtlDiffHash);
     event EmergencyPauseActivated(address indexed activator, uint256 timestamp);
     event ConstitutionUpdated(bytes32 newHash);
 
@@ -661,7 +661,7 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
         return computedRoot == V1_MODULE_ROOT;
     }
 
-    function verifyOpusConsent(bytes32 rtlDiffHash, bytes calldata signature)
+    function verifyV1ModuleReview(bytes32 rtlDiffHash, bytes calldata signature)
         public view returns (bool)
     {
         bytes32 digest = ECDSA.toEthSignedMessageHash(rtlDiffHash);
@@ -673,7 +673,7 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
     // =========================================================
 
     /// @notice Submit a proposal to add or modify a module.
-    ///         Reverts if: touching v1.0.0 without Opus consent,
+    ///         Reverts if: touching v1.0.0 without extended review signature,
     ///                     targeting Section 10 (hard invariants),
     ///                     or relicensing hardware (invariant OPEN_LICENSE).
     function proposeModuleChange(
@@ -690,18 +690,18 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
         // HARD INVARIANT: Section 13.2 — cannot touch Section 10
         require(!meta.touchesHardInvariants, "INVARIANT: Section 10 is unamendable (Section 13.2)");
 
-        // HARD INVARIANT: Section 8.4 / 10.3 — Opus consent for v1.0.0 modules
+        // HARD INVARIANT: Section 8.4 / 10.3 — extended review required for v1.0.0 modules
         if (meta.touchesV1Modules) {
             require(
-                opusKeyPublished && verifyOpusConsent(meta.rtlDiffHash, meta.opusConsentSignature),
+                v1ModuleKeyPublished && verifyV1ModuleReview(meta.rtlDiffHash, meta.v1ModuleSignature),
             );
             // Also validate that proposed modules still preserve v1.0.0 root
-            // (Opus consent is necessary but not sufficient — must pass formal check)
+            // (Extended review signature is necessary but not sufficient — must pass formal check)
             require(
                 bytes(meta.documentationURI).length > 0 && meta.coqProofCID != bytes32(0),
                 "INVARIANT: Coq formal verification certificate required for v1.0.0 changes"
             );
-            emit OpusConsentVerified(0, meta.rtlDiffHash); // proposalId emitted post-creation
+            emit V1ModuleReviewVerified(0, meta.rtlDiffHash); // proposalId emitted post-creation
         }
 
         proposalId = propose(targets, values, calldatas, description);

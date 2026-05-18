@@ -144,4 +144,4 @@ vvp /tmp/tbtap  # PASS 9/9
 
 ## Version
 
-v1.0.0 — Opus 4.6
+v1.0.0

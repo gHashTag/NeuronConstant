@@ -2,7 +2,7 @@
 // Q0.15 Fixed-Point Format (16-bit signed, 15 fractional bits, range [-1, 1))
 // Multiply via shift-add 16x16 -> Q0.30 -> downshift to Q0.15 with saturation
 // R-SI-1 compliant: ZERO standalone * operators
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 // Q0.15 multiply: a * b -> result in Q0.15 with saturation

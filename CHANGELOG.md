@@ -33,3 +33,19 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - R-SI-1: zero standalone `*` operators in synthesisable RTL
 - TTSKY26b shuttle close: 2026-05-18; chip delivery: ~2026-12-16
 - DOI: [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)
+
+## 2026-05-18 — Tokenomics v2 (3^27) + cleanup
+
+### Added
+- `docs/tokenomics/v2/` — Tokenomics v2 pack (15 files, 9665+ lines)
+  - 10 numbered specs (00 manifesto → 09 legal defense)
+  - TRI_TOKENOMICS_WHITEPAPER_v2.md, MIGRATION_NOTES, PI_REVIEW, TWITTER_LAUNCH_THREAD, INDEX
+- `contracts/v2/src/` — TriToken.sol, MiningPool.sol, EmissionController.sol (3^27 supply, mineable-only)
+- `contracts/v2/test/` — Foundry tests for hard cap and mint authority
+
+### Changed
+- Total supply locked at 3^27 = 7,625,597,484,987 TRI (was 1B placeholder in v1 draft)
+- `docs/sprint-2026-05-18/TRI_TOKENOMICS_WHITEPAPER.md` updated supply 1B → 3^27 in 4 places, governance section renamed
+- 25 files cleaned of AI co-author / Anthropic / Opus 4.6 mentions (sole author mandate — PI Dmitrii Vasilev, admin@t27.ai)
+- Benchmark `63 tok/s/W` replaced with honest `~1 GOPS @ ~50 MHz @ ~1W ternary (projected)` in 2 docs files
+- 13 RTL/Verilog/circom file headers attribution updated (sole author)

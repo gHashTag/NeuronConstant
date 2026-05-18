@@ -4,7 +4,7 @@
 // Value = (-1)^S * 2^(log_val / 16.0)  [log stored as Q3.4 with scale=16]
 // Advantage: multiplication becomes addition (R-SI-1 native)
 // LUT: 128-entry log2 -> linear conversion
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 // LNS8 decode: 8-bit LNS -> Q8.8 linear value

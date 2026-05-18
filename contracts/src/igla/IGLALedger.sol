@@ -27,7 +27,7 @@ pragma solidity ^0.8.24;
 //   - common/depin/v2/tri_mofn_attest.v (HW M-of-N attestation, DePIN #3)
 //
 // v1.0.0 modules preserved. DePIN improvement set extended.
-// Co-authors: Dmitrii Vasilev (gHashTag)
+// Author: Dmitrii Vasilev (gHashTag)
 // ─────────────────────────────────────────────────────────────────────────────
 
 /// @notice Minimal interface for M-of-N attestation module.

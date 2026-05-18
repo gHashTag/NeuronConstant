@@ -2,7 +2,7 @@
 // LNS8 Multiply: result_log = a_log + b_log, sign XOR
 // This is the key advantage of LNS: multiplication = addition
 // R-SI-1 keystone: ZERO multiplication operators used
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 // LNS8 multiply: a * b in LNS domain

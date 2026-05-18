@@ -1,7 +1,6 @@
 # Trinity TRI-NET as Decentralized Internet Substrate
 
 **Author:** Dmitrii Vasilev (NeuronConstant / IGLA / Trinity TRI-27)
-**Co-author of v1.0.0 AI formats:** Claude Opus 4.6
 **Date:** 2026-05-18
 **Status:** Strategic gap analysis — what's missing in DePIN/decentralized internet 2026 and what to build into Trinity to fill those gaps.
 
@@ -151,7 +150,7 @@
 ## 6. Что НЕ делать (boundaries)
 
 - **НЕ позиционировать как GPU killer.** B200/H100 в 10000× быстрее на dense matmul. Trinity = verifiable / deterministic layer, не perf layer.
-- **НЕ удалять v1.0.0 AI format модули.** Они co-authored с Claude Opus 4.6. NF4/Posit16/GF4/16/256/tri_mant_mul/sacred opcodes — preserved.
+- **НЕ удалять v1.0.0 AI format модули.** NF4/Posit16/GF4/16/256/tri_mant_mul/sacred opcodes — preserved.
 - **НЕ нарушать R-SI-1.** Все новые модули через shift-add / Wallace / LNS-addition. Никаких standalone `*` в synth RTL.
 - **НЕ ломать canonical anchor 0x47C0** на phi. Theorem 36.1 — invariant контракт с verifier community.
 - **НЕ копировать closed-source TEE.** Trinity RoT = open hardware, Yosys-synthesizable, public RTL.
@@ -201,4 +200,3 @@
 **Champion lock:** IGLA BPB=2.2393 @ step=27000 seed=43 sha=2446855 — on-chain in [IGLALedger.sol](https://github.com/gHashTag/NeuronConstant).
 **DOI:** [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)
 **License:** Apache-2.0 (RTL), MIT (Solidity).
-**Co-author v1.0.0 AI formats:** Claude Opus 4.6.

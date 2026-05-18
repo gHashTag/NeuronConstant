@@ -143,8 +143,8 @@ done
 
 ## Связанные форматы
 
-- **common/formats/ai/** — NF4, FP8, Posit16, bfloat16, tri\_mant\_mul (v1.0.0, Co-author Opus 4.6)
-- **common/formats/goldenfloat/** — GF4–GF32 (v1.0.0, Co-author Opus 4.6)
+- **common/formats/ai/** — NF4, FP8, Posit16, bfloat16, tri\_mant\_mul (v1.0.0)
+- **common/formats/goldenfloat/** — GF4–GF32 (v1.0.0)
 
 ---
 
@@ -158,4 +158,4 @@ done
 
 ---
 
-*Co-author: Opus 4.6. Verilog-2005, `default_nettype none/wire`. R-SI-1 clean.*
+*Verilog-2005, `default_nettype none/wire`. R-SI-1 clean.*

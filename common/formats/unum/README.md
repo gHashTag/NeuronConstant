@@ -217,7 +217,7 @@ Output is unified 32-bit signed Q16.16 (scale = 65536). Decodes sign, is_zero, i
 - **R-SI-1**: Zero standalone `*` operators. All multiplication implemented as shift-add (partial product trees, Wallace-tree accumulation).
 - **Verilog-2005**: All modules use `\`default_nettype none` at start, `\`default_nettype wire` at end.
 - **No external dependencies**: All LUT data precomputed and embedded in RTL.
-- **v1.0.0 Opus 4.6 preserved**: This directory only extends existing work; no prior files deleted or modified.
+- **v1.0.0 preserved**: This directory only extends existing work; no prior files deleted or modified.
 
 ---
 

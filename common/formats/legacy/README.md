@@ -169,4 +169,4 @@ common/formats/legacy/
 
 ---
 
-*v1.0.0 Opus 4.6 preserved. R-SI-1 clean. Verilog-2005.*
+*v1.0.0 preserved. R-SI-1 clean. Verilog-2005.*

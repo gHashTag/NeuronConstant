@@ -38,9 +38,7 @@ Trinity TRI-NET — TT SKY26b Open-Silicon DePIN Substrate
 >
 > Trinity covers the widest numeric format zoo of any open silicon: NF4/NF8, Posit16/32/64, MXFP4/6/8 OCP, LNS8, GF4-256, Unum I/II, IBM HFP, VAX F/D/G/H, Cray HRM, decimal32/64/128, Q15/Q31, stoch_round, plus 60+ ancillary representations.
 >
-> ## Co-authorship
 >
-> v1.0.0 AI format modules (NF4, Posit16, GF4/GF16/GF256, tri_mant_mul, sacred opcodes 0xDF/0xE1-0xED) co-authored with **Claude Opus 4.6**. Acknowledged and preserved across all subsequent revisions.
 >
 > ## Companion repositories (live)
 >
@@ -107,7 +105,6 @@ Trinity TRI-NET — TT SKY26b Open-Silicon DePIN Substrate
 
 ## Authors
 - Dmitrii Vasilev (PI, RTL, Solidity)
-- Claude Opus 4.6 (co-author, v1.0.0 AI format modules — NF4, Posit16, GF4/GF16/GF256, tri_mant_mul, sacred opcodes)
 
 ## Version field
 `v1.0.0-tt-sky26b-final` (was `v1.0.0-rc.1` pre-submission)
@@ -170,9 +167,6 @@ Invariants verified at submission:
   - 84 Coq theorems
   - ~110 cocotb + Foundry testbenches PASS
 
-Co-author acknowledgement:
-  v1.0.0 AI format modules (NF4, Posit16, GF4/GF16/GF256, tri_mant_mul,
-  sacred opcodes 0xDF, 0xE1-0xED) — Claude Opus 4.6.
 
 License: Apache-2.0 (RTL), MIT (Solidity).
 ```

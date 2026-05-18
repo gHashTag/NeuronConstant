@@ -528,7 +528,7 @@ This work is self-funded by Dmitrii Vasilev / Trinity Stack. A DARPA CLARA submi
 
 ## 14. Competing Interests
 
-Dmitrii Vasilev is the founder of Trinity Stack and a prospective issuer of the $TRI utility token. If the $TRI token is issued, DV will hold a financial interest in the network whose technical foundation is described in this paper. This constitutes a potential conflict of interest and is disclosed in full. No financial relationships exist between the authors and any of the commercial chip vendors (NVIDIA, Cerebras, Groq, Hailo, Anthropic) mentioned for comparison purposes.
+Dmitrii Vasilev is the founder of Trinity Stack and a prospective issuer of the $TRI utility token. If the $TRI token is issued, DV will hold a financial interest in the network whose technical foundation is described in this paper. This constitutes a potential conflict of interest and is disclosed in full. No financial relationships exist between the authors and any of the commercial chip vendors (NVIDIA, Cerebras, Groq, Hailo) mentioned for comparison purposes.
 
 
 ---

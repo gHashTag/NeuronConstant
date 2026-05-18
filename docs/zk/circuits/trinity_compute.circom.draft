@@ -6,7 +6,7 @@
 //          Some sub-circuits (blake3, full ISA opcode set) are stubs.
 //          Full implementation will reside at: zk/circuits/trinity_compute.circom
 //
-// Co-authors: Dmitrii Vasilev (gHashTag), Claude Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 // Part of DePIN improvement #10 of 10
 // DOI reference: 10.5281/zenodo.19227877 (NeuronConstant v1.0.0)
 //

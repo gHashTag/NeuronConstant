@@ -12,7 +12,7 @@
 //   8 = StochRound (Stochastic Rounding 32->8)
 // Operation mode: decode only (encode paths in per-module files)
 // Reference: OCP MX Spec https://www.opencompute.org/projects/microscaling-formats-mx
-// Co-author: Opus 4.6
+// Author: Dmitrii Vasilev (gHashTag)
 `default_nettype none
 
 module block_floats_pack (
