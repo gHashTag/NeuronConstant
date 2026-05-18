@@ -20,10 +20,11 @@
 6. [Burn Mechanisms](#6-burn-mechanisms)
 7. [Governance — TriDAO](#7-governance--tridao)
 8. [On-Chain Anchoring](#8-on-chain-anchoring)
-9. [Competitor Comparison Table](#9-competitor-comparison-table)
-10. [Launch Sequence](#10-launch-sequence)
-11. [Risks & Disclaimers](#11-risks--disclaimers)
-12. [References](#12-references)
+9. [Trinity Is One Computer](#9-trinity-is-one-computer)
+10. [Competitor Comparison Table](#10-competitor-comparison-table)
+11. [Launch Sequence](#11-launch-sequence)
+12. [Risks & Disclaimers](#12-risks--disclaimers)
+13. [References](#13-references)
 
 ---
 
@@ -334,13 +335,149 @@ The `0x47C0` anchor is not a software constant — it is hardwired into the TT S
 
 - An Operator cannot forge a silicon signature without physically possessing a valid SKY26b die.
 - The network can verify a signature's origin at zero marginal cost using the die's public key (registered on-chain at node registration time).
-- Future SKY26c and IHP26b (second-source, SG13G2 process) dies will carry the same anchor identity, verified during the Trinity Node Kit manufacturing certification process (see §10).
+- Future SKY26c and IHP26b (second-source, SG13G2 process) dies will carry the same anchor identity, verified during the Trinity Node Kit manufacturing certification process (see §11).
 
-This hardware root-of-trust is the primary technical differentiator versus software-only DePIN networks. See §9 for competitor comparison.
+This hardware root-of-trust is the primary technical differentiator versus software-only DePIN networks. See §10 for competitor comparison.
 
 ---
 
-## 9. Competitor Comparison Table
+## 9. Trinity Is One Computer
+
+> **Foundational architectural axiom.** Phi, Euler, and Gamma are not three independent products. They are three specialized organs of one distributed Trinity Computer, bound by a tri-ring fabric, a unified instruction set, and 2-of-3 attestation. This section frames the entire token, mining, and hardware narrative around that single fact.
+
+**Companion architecture specs** (full RTL/topology/voter detail):
+- [docs/architecture/UNIFIED_COMPUTER_PARADIGM.md](../../architecture/UNIFIED_COMPUTER_PARADIGM.md)
+- [docs/architecture/TRINITY_RING_TOPOLOGY.md](../../architecture/TRINITY_RING_TOPOLOGY.md)
+- [docs/architecture/TMR_DEFENSE_GRADE.md](../../architecture/TMR_DEFENSE_GRADE.md)
+- [docs/architecture/UNIFIED_COMPUTER_SKUS.md](../../architecture/UNIFIED_COMPUTER_SKUS.md)
+
+### 9.1 The Paradigm Shift
+
+A modern CPU is billions of transistors organized into ALUs, caches, fetch units, branch predictors, and memory controllers. We still call it **one CPU** because the parts only make sense together. Trinity applies the same logic one fractal level up: three specialized dies that only make sense together.
+
+| Classical CPU subunit              | Trinity die  | Role                                           |
+|------------------------------------|--------------|------------------------------------------------|
+| Branch predictor / TLB / key store | Phi (1×1)    | Identity, authentication, attestation gate     |
+| ALU / FPU / decode pipeline        | Euler (8×2)  | Compute, ZK proof generation, sumcheck verify  |
+| Cache hierarchy / vector unit      | Gamma (8×4)  | Parallel compute fabric, memory, storage       |
+
+Treating Phi, Euler, and Gamma as three independent products is a category error. The customer-facing unit is the **Trinity Computer**.
+
+### 9.2 Three Silicon Organs
+
+```
+Phi    (1×1)  =  Cerebellum         identity, baseline trust, attestation
+Euler  (8×2)  =  Prefrontal cortex   reasoning, ZK proofs, sumcheck
+Gamma  (8×4)  =  Neocortex           massive parallel neuromorphic compute
+```
+
+Each is semi-functional in isolation. Together they form a complete cognitive architecture: identity + reasoning + perception/memory, bound by 2-of-3 attestation, verified through ternary completeness `3^27`.
+
+### 9.3 Cross-Die Mesh Fabric — Tri-Ring Topology
+
+The interconnect is a **tri-directional ring** (`K3` minus one edge per direction): the minimum-edge vertex-transitive graph on three nodes. Each die has exactly two cross-die ports; diameter is 1; no privileged "host."
+
+```
+          Phi (1×1)
+         ▲     \
+         │      \
+   [phi-eul]   [gam-phi]
+         │        \
+         │         \
+       Euler ──────► Gamma
+        (8×2) [eul-gam] (8×4)
+```
+
+Per-link physical layer: 8 bits/cycle × 50 MHz = 50 MB/s per directional link. Aggregate tri-ring bandwidth: **150 MB/s** — sufficient for streaming AI inference across the Phi → Euler → Gamma pipeline. Diameter-1 routing means no runtime routing tables. Single-link failure degrades to a 2-hop reroute, never disconnection.
+
+Full RTL module names and tile budgets in [TRINITY_RING_TOPOLOGY.md](../../architecture/TRINITY_RING_TOPOLOGY.md).
+
+### 9.4 Unified Memory Model
+
+A single coherent 512 KB address space spans all three dies:
+
+```
+0x0000_0000–0x0000_FFFF   Phi local        (64 KB)
+0x0001_0000–0x0001_FFFF   Euler local      (64 KB)
+0x0002_0000–0x0002_FFFF   Gamma local      (64 KB)
+0x0003_0000–0x0003_FFFF   Shared coherent  (64 KB)
+0x0004_0000–0x0007_FFFF   Distributed      (256 KB, striped)
+```
+
+A MESI-style coherence protocol (`trinity_coherent_cache`) provides {Modified, Exclusive, Shared, Invalid} states across the three dies. Cross-die DMA translates `{src_addr, dst_addr, length}` descriptors into ring traffic with address bits `[19:16]` selecting the destination die.
+
+### 9.5 Distributed Pipeline & XCHIP ISA
+
+A single AI inference traverses the triad as one logical pipeline:
+
+```
+Stage 1: PHI            Stage 2: EULER           Stage 3: GAMMA
+Identity check     →    Decode reasoning     →   Massive parallel
+PUF auth                Execute exp/log          Mesh routing
+Challenge sign          Generate ZK proof        Storage proof
+   "WHO?"               "WHAT?"                   "DO"
+```
+
+Nine cross-chip opcodes (`XCHIP_SEND_*`, `XCHIP_RECV_*`, `XCHIP_BARRIER_3`, `XCHIP_TRIPLE_SIGN`, `XCHIP_BROADCAST`) extend the TRI-27 ISA from 36 → 45 opcodes — still divisible by 9, preserving Coptic 9-fold alignment.
+
+### 9.6 Triple Modular Redundancy (TMR) — 2-of-3 Attestation
+
+Safety-critical operations execute on all three dies in parallel and resolve via a 2-of-3 majority voter (`tmr_voter`). TMR is **selective**, not blanket — applied to:
+
+- Cryptographic signing (DID, validator, attestation)
+- Champion BPB lock check at 2.2393
+- Phi-anchor `0x47C0` reaffirmation (Theorem 36.1)
+- `MiningPool` reward eligibility decisions
+- Yuma Consensus validator scoring
+
+Routine ternary inference and ZK proof generation do **not** run under TMR (the latter is already cryptographically self-verifying).
+
+A disagreeing die writes a fault record to `0x0003_F000` in the shared coherent buffer; Trinity OS drains it, attributes the fault, and can down-rank the disagreeing die. Full voter RTL, dispatch path, and tile budget in [TMR_DEFENSE_GRADE.md](../../architecture/TMR_DEFENSE_GRADE.md).
+
+### 9.7 Power Coordination
+
+Independent per-die power management wastes energy. A `trinity_power_coordinator` performs cross-die DVFS based on workload class:
+
+| Scenario             | Phi    | Euler  | Gamma  | Total  |
+|----------------------|--------|--------|--------|--------|
+| Idle                 | 100 mW | 100 mW | 100 mW | 0.3 W  |
+| Authentication only  | 500 mW | 100 mW | 100 mW | 0.7 W  |
+| ZK proof generation  | 200 mW | 1000 mW| 200 mW | 1.4 W  |
+| AI inference         | 200 mW | 500 mW | 1000 mW| 1.7 W  |
+| Full TMR (defense)   | 1000 mW| 1000 mW| 1000 mW| 3.0 W  |
+
+Average operational draw is **~1.5 W**, vs a naive 3 W if all three dies ran at nominal frequency continuously — **~2× system-level efficiency** without changing any per-die RTL.
+
+### 9.8 Defense-in-Depth Security
+
+Three orthogonal security primitives map one-to-one to the CIA triad and to the three dies:
+
+| Layer            | Phi              | Euler                  | Gamma                          |
+|------------------|------------------|------------------------|--------------------------------|
+| Identity         | PUF + Lucas POST | —                      | —                              |
+| Confidentiality  | —                | ZK proof generation    | —                              |
+| Integrity        | —                | —                      | TMR voting + storage proof     |
+| Availability     | Watchdog         | Compute heartbeat      | Mesh routing redundancy        |
+
+Compromising Trinity requires breaking all three dies via three different attack vectors simultaneously — multiplicatively hard.
+
+### 9.9 Why This Matters — Token, Product, and Narrative Implications
+
+The One Computer paradigm is not framing; it is the load-bearing axiom for the rest of this whitepaper.
+
+**Tokenomics coupling.** Mining rewards scale by configuration, with a step at the Triad boundary (Phi+Euler+Gamma) that incentivizes the full computer over isolated dies: Solo `1×`, Duo `2×`, **Triad `4×`** (TMR-attested), Cluster `12×` (linear in Triad count), Datacenter `~100×` (sqrt-law, anti-centralization). The Triad bonus is enforceable on-chain only when a 2-of-3 attested Trinity DID is presented — a property no software-only system can claim. See [UNIFIED_COMPUTER_SKUS.md](../../architecture/UNIFIED_COMPUTER_SKUS.md) §5.
+
+**Product structure.** Five SKUs (Solo $99 / Duo $499 / Triad $1,499 / Cluster $4,999 / Datacenter $39,999) replace three per-die SKUs. Customers buy a Trinity Computer; they never select dies individually.
+
+**Roadmap.** TTSKY26b establishes the silicon substrate (this submission). TTSKY26c (Sep–Nov 2026) ships the **Unified Computer enablement layer** (~30 tiles distributed): cross-die DMA endpoints, tri-ring routers, TMR voter, coherent cache controller, power coordinator, XCHIP decode, Trinity OS bootstrap ROM. TTSKY27 introduces mesh-of-meshes scaling to `3^4 = 81` dies per Datacenter rack.
+
+**Honest benchmarks.** Aggregate ternary throughput ~3 GOPS at ~1.5 W average system power, ~60 ns added cross-die latency per pipeline traversal. All figures projected pending tape-out 2026-12-16. Real silicon numbers published the day chips return from fab.
+
+**The one sentence to remember.** *Trinity is one computer with three minds, bound by 2-of-3 attestation, verified by ternary completeness `3^27`.*
+
+---
+
+## 10. Competitor Comparison Table
 
 The following table compares $TRI against six comparable DePIN and AI compute networks. Data sourced from public documentation and whitepapers as of May 2026.
 
@@ -364,7 +501,7 @@ The following table compares $TRI against six comparable DePIN and AI compute ne
 
 ---
 
-## 10. Launch Sequence
+## 11. Launch Sequence
 
 All dates are preliminary targets, subject to silicon tape-out schedules and regulatory clearance. Note: because there is no TGE with investor or team token distributions, the launch sequence is driven entirely by hardware availability and network readiness.
 
@@ -383,41 +520,41 @@ All dates are preliminary targets, subject to silicon tape-out schedules and reg
 
 ---
 
-## 11. Risks & Disclaimers
+## 12. Risks & Disclaimers
 
-### 11.1 Regulatory Risk
+### 12.1 Regulatory Risk
 
 $TRI is issued as a **utility token** — it confers rights to use the Trinity network, not equity, profit share, or governance over a legal entity. Regulatory status of utility tokens is unsettled in the United States (SEC Howey test application), the European Union (MiCA framework, effective December 2024), the United Kingdom (FCA cryptoasset regime), and other jurisdictions. Trinity's legal entity and token issuance structure will be finalised in consultation with qualified legal counsel before mainnet genesis. **US persons may be excluded from direct network participation in certain capacities pending legal review.** Nothing in this document should be read as a legal opinion.
 
 The 100% mineable model is designed to minimise the characteristics that regulators associate with investment contracts (expectation of profit from the efforts of others). However, no assurance can be given that regulators will view $TRI as a utility token. The legal analysis will be published before mainnet genesis.
 
-### 11.2 Hardware Supply Chain Risk
+### 12.2 Hardware Supply Chain Risk
 
-Trinity is dependent on Tenstorrent SKY26b die availability. Shuttle delays, wafer yield issues, or export controls affecting TSMC, IHP, or their suppliers could delay or reduce the number of active Operator nodes at launch. The IHP26b second-source programme (§10, Q1 2027) is specifically designed to mitigate single-source dependency. Until second-source silicon is available, the network's geographic Operator distribution may be constrained.
+Trinity is dependent on Tenstorrent SKY26b die availability. Shuttle delays, wafer yield issues, or export controls affecting TSMC, IHP, or their suppliers could delay or reduce the number of active Operator nodes at launch. The IHP26b second-source programme (§11, Q1 2027) is specifically designed to mitigate single-source dependency. Until second-source silicon is available, the network's geographic Operator distribution may be constrained.
 
-### 11.3 Fair Launch & Cold Start Risk
+### 12.3 Fair Launch & Cold Start Risk
 
 A 100% mineable supply model means the network must bootstrap liquidity and operator participation without any pre-funded entity to provide market depth. The Era 0 reward of 1,000 TRI per proof is calibrated to provide meaningful economic incentive during the bootstrapping phase, but early market liquidity is uncertain. Participants who mine early bear higher risk; they also earn at the highest reward rate in network history.
 
-### 11.4 Competitor Reaction
+### 12.4 Competitor Reaction
 
-Established networks (Bittensor TAO, io.net IO, Render RNDR) have significant market capitalisations and developer communities. Trinity's hardware-anchor differentiator is technical and may require significant market education. There is no assurance that Trinity will achieve comparable network effects. The comparison table in §9 is factual; it does not constitute a claim that $TRI will achieve parity or exceed competitor valuations.
+Established networks (Bittensor TAO, io.net IO, Render RNDR) have significant market capitalisations and developer communities. Trinity's hardware-anchor differentiator is technical and may require significant market education. There is no assurance that Trinity will achieve comparable network effects. The comparison table in §10 is factual; it does not constitute a claim that $TRI will achieve parity or exceed competitor valuations.
 
-### 11.5 Smart Contract Risk
+### 12.5 Smart Contract Risk
 
-On-chain contracts are subject to bugs, exploits, and unforeseen interactions. Annual audits (Trail of Bits + Zellic — see §10) reduce but do not eliminate this risk. The emergency pause mechanism (§8.2) provides a circuit breaker. All contract source code will be published on-chain and in the Trinity GitHub repository before mainnet genesis.
+On-chain contracts are subject to bugs, exploits, and unforeseen interactions. Annual audits (Trail of Bits + Zellic — see §11) reduce but do not eliminate this risk. The emergency pause mechanism (§8.2) provides a circuit breaker. All contract source code will be published on-chain and in the Trinity GitHub repository before mainnet genesis.
 
-### 11.6 Emission & Deflationary Model Risk
+### 12.6 Emission & Deflationary Model Risk
 
 The 9-halving emission schedule is modelled on Bitcoin's proven supply mechanics, adapted to a proof-of-work-on-silicon context. If proof volume (inference demand) grows slower than projected, early miners will earn fewer tokens and the ecosystem may fail to reach self-sustaining fee revenue. If demand grows faster than projected, the Era 0 reward may be effectively diluted across a larger miner population. Neither scenario is guaranteed; actual outcomes depend on market adoption.
 
-### 11.7 No Return Guarantee
+### 12.7 No Return Guarantee
 
 **No financial return is guaranteed, implied, or suggested anywhere in this document.** $TRI may lose value, become illiquid, or become worthless. Participation in the Trinity network as an Operator, Verifier, Trainer, Consumer, or Governor involves financial risk. Do not allocate more than you can afford to lose. Past performance of comparable tokens is not indicative of $TRI performance.
 
 ---
 
-## 12. References
+## 13. References
 
 The following sources were consulted in preparing this whitepaper. All URLs are publicly accessible as of May 2026.
 
