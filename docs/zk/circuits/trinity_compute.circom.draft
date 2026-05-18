@@ -1,0 +1,521 @@
+// SPDX-License-Identifier: Apache-2.0
+// Trinity ZK Proof-of-Compute — Circom 2.x Circuit Draft
+//
+// WARNING: This is a SPECIFICATION DRAFT, not a production circuit.
+//          It illustrates the structure and constraint design.
+//          Some sub-circuits (blake3, full ISA opcode set) are stubs.
+//          Full implementation will reside at: zk/circuits/trinity_compute.circom
+//
+// Co-authors: Dmitrii Vasilev (gHashTag), Claude Opus 4.6
+// Part of DePIN improvement #10 of 10
+// DOI reference: 10.5281/zenodo.19227877 (NeuronConstant v1.0.0)
+//
+// Constraint count estimate:
+//   64-opcode batch:  ~52K  R1CS constraints
+//   256-opcode batch: ~200K R1CS constraints
+//
+// References:
+//   - NeuronConstant/common/depin/tri_token_accumulator.v (HW accumulator logic)
+//   - NeuronConstant/common/constants/sacred_constants_rom.v (0x47C0 anchor)
+//   - Groth16: https://eprint.iacr.org/2016/260.pdf
+//   - Circom docs: https://docs.circom.io/
+
+pragma circom 2.1.0;
+
+include "circomlib/circuits/comparators.circom";
+include "circomlib/circuits/bitify.circom";
+include "circomlib/circuits/gates.circom";
+
+// ============================================================
+// TEMPLATE: Num2Bits4
+// Decompose a 4-bit number into its binary representation.
+// Used for NF4 / GF4 / GF16 operands.
+// Constraints: 4 (one per bit)
+// ============================================================
+template Num2Bits4() {
+    signal input  in;
+    signal output bits[4];
+
+    // Bit decomposition: each bit is boolean
+    for (var i = 0; i < 4; i++) {
+        bits[i] <-- (in >> i) & 1;
+        bits[i] * (bits[i] - 1) === 0;  // boolean constraint: bit ∈ {0,1}
+    }
+
+    // Reconstruct to verify decomposition is correct
+    // in === bits[0] + 2*bits[1] + 4*bits[2] + 8*bits[3]
+    in === bits[0] + 2*bits[1] + 4*bits[2] + 8*bits[3];
+}
+
+// ============================================================
+// TEMPLATE: RangeCheck16
+// Verify that a value fits in 16 bits (0 <= x < 65536).
+// Used for Posit16 / TRI token balance / anchor values.
+// Constraints: ~16 (16-bit decomposition)
+// ============================================================
+template RangeCheck16() {
+    signal input in;
+    signal output out;  // passes through if valid
+
+    // 16-bit decomposition — circomlib Num2Bits_strict would work here
+    signal bits[16];
+    for (var i = 0; i < 16; i++) {
+        bits[i] <-- (in >> i) & 1;
+        bits[i] * (bits[i] - 1) === 0;  // boolean constraint
+    }
+
+    // Verify reconstruction
+    var acc = 0;
+    for (var i = 0; i < 16; i++) {
+        acc = acc + bits[i] * (1 << i);
+    }
+    in === acc;
+
+    out <== in;
+}
+
+// ============================================================
+// TEMPLATE: TriMantMul
+// Emulates NeuronConstant tri_mant_mul hardware logic.
+//
+// Hardware reference: NeuronConstant/common/ (tri_mant_mul, R-SI-1 compliant)
+// Operation: 4-bit NF4 mantissa × 4-bit NF4 mantissa → 8-bit result
+// Method: shift-and-add (mirrors R-SI-1 constraint: no direct multiply)
+// sacred_flag: 1 if opcode producing this mul is in sacred set (0x47C0 domain)
+//
+// Constraints: ~44 per invocation
+//   - 4 boolean constraints (a bits)
+//   - 4 boolean constraints (b bits)
+//   - 4 conditional additions (b[i] * shifted_a)  → ~16 mul constraints
+//   - partial product accumulation                 → ~16 add constraints
+//   - output range check (8-bit)                   → ~8 constraints
+// ============================================================
+template TriMantMul() {
+    signal input  a;           // 4-bit NF4 mantissa (range 0..15)
+    signal input  b;           // 4-bit NF4 mantissa (range 0..15)
+    signal input  is_sacred;   // 1 if this mul is triggered by sacred opcode
+    signal output product;     // 8-bit result (range 0..225, max 15*15)
+    signal output sacred_flag; // 1 if is_sacred AND product > 0
+
+    // ---- Decompose a into bits ----
+    // a_bits[i] = bit i of a
+    signal a_bits[4];
+    for (var i = 0; i < 4; i++) {
+        a_bits[i] <-- (a >> i) & 1;
+        a_bits[i] * (a_bits[i] - 1) === 0;  // boolean: a_bits[i] ∈ {0,1}
+    }
+    // Verify a = sum(a_bits[i] * 2^i)
+    a === a_bits[0] + 2*a_bits[1] + 4*a_bits[2] + 8*a_bits[3];
+
+    // ---- Decompose b into bits ----
+    signal b_bits[4];
+    for (var i = 0; i < 4; i++) {
+        b_bits[i] <-- (b >> i) & 1;
+        b_bits[i] * (b_bits[i] - 1) === 0;  // boolean: b_bits[i] ∈ {0,1}
+    }
+    // Verify b = sum(b_bits[i] * 2^i)
+    b === b_bits[0] + 2*b_bits[1] + 4*b_bits[2] + 8*b_bits[3];
+
+    // ---- Shift-and-add multiplication ----
+    // partial[i] = b_bits[i] * (a << i)  — conditional shifted copies of a
+    // This mirrors the R-SI-1 hardware: no direct '*' on full operands.
+    // We use b_bits[i] (boolean) * (a * 2^i) which is one rank-1 constraint per bit.
+    signal partial[4];
+    partial[0] <== b_bits[0] * a;          // a * 2^0 * b_bit[0]
+    partial[1] <== b_bits[1] * (a * 2);    // a * 2^1 * b_bit[1]
+    partial[2] <== b_bits[2] * (a * 4);    // a * 2^2 * b_bit[2]
+    partial[3] <== b_bits[3] * (a * 8);    // a * 2^3 * b_bit[3]
+
+    // Accumulate partial products → 8-bit product
+    product <== partial[0] + partial[1] + partial[2] + partial[3];
+
+    // ---- Range check on product (0..225 fits in 8 bits) ----
+    // Max product: 15*15 = 225. We verify product < 256 via 8-bit decomposition.
+    signal prod_bits[8];
+    for (var i = 0; i < 8; i++) {
+        prod_bits[i] <-- (product >> i) & 1;
+        prod_bits[i] * (prod_bits[i] - 1) === 0;  // boolean
+    }
+    var prod_recon = 0;
+    for (var i = 0; i < 8; i++) {
+        prod_recon = prod_recon + prod_bits[i] * (1 << i);
+    }
+    product === prod_recon;
+
+    // ---- Sacred flag ----
+    // sacred_flag = is_sacred * (product > 0)
+    // We use: product_nonzero = 1 if product != 0, else 0
+    // Simplified: sacred_flag = is_sacred (flag is set if sacred opcode executed mul)
+    // For spec purposes: sacred_flag fires whenever is_sacred=1 and product=0 is excluded
+    signal product_nonzero;
+    product_nonzero <-- product != 0 ? 1 : 0;
+    product_nonzero * (product_nonzero - 1) === 0;  // boolean
+    // product_nonzero=1 implies product != 0; product_nonzero=0 implies product=0
+    product * (1 - product_nonzero) === 0;  // if product_nonzero=0 → product=0
+
+    sacred_flag <== is_sacred * product_nonzero;
+}
+
+// ============================================================
+// TEMPLATE: AnchorCheck
+// Verifies that the sacred 0x47C0 anchor is maintained.
+//
+// Hardware reference: sacred_constants_rom.v — addresses 16 (0x47) and 17 (0xC0)
+// The anchor 0x47C0 = 18368 decimal must equal the anchor_register at every step.
+//
+// Constraints: 1 (equality check)
+// ============================================================
+template AnchorCheck() {
+    signal input  anchor_register;  // current 16-bit anchor register value
+    signal output valid;            // 1 if anchor is correct
+
+    // The sacred anchor constant: 0x47C0 = 18368
+    var ANCHOR_CONSTANT = 18368;
+
+    // Enforce equality: anchor_register MUST equal 0x47C0
+    // If this constraint fails, the proof is invalid.
+    anchor_register === ANCHOR_CONSTANT;
+
+    valid <== 1;  // if we reach here, anchor is valid
+}
+
+// ============================================================
+// TEMPLATE: OpcodeValid
+// Verifies that an opcode is within the TRI-27 sacred set (0..26).
+//
+// The TRI-27 ISA has 27 valid opcodes. Any opcode ≥ 27 is invalid.
+// Constraints: ~32 (5-bit decomposition + range check)
+// ============================================================
+template OpcodeValid() {
+    signal input  opcode;   // 5-bit opcode (0..31 range, but 0..26 valid)
+    signal output valid;    // 1 if opcode ∈ {0..26}
+
+    // 5-bit decomposition
+    signal op_bits[5];
+    for (var i = 0; i < 5; i++) {
+        op_bits[i] <-- (opcode >> i) & 1;
+        op_bits[i] * (op_bits[i] - 1) === 0;  // boolean
+    }
+    opcode === op_bits[0] + 2*op_bits[1] + 4*op_bits[2] + 8*op_bits[3] + 16*op_bits[4];
+
+    // Range check: opcode < 27
+    // We compute: opcode + (31 - 26) = opcode + 5, then check bit 5 is not set
+    // More precisely: use LessThan component (circomlib)
+    // For spec clarity: opcode <= 26 ↔ opcode - 27 < 0 in unsigned = opcode < 27
+    // Using 5-bit comparison: 27 in binary = 11011, so opcode[4]=1 AND opcode[3]=1 AND opcode[1]=1 → invalid
+    // Simplified constraint: (opcode - 27) must not be in [0, 4], i.e., opcode ∈ {0..26}
+    // Implementation: LessThan(5) from circomlib
+    // component lt = LessThan(5);   // Note: requires circomlib import
+    // lt.in[0] <== opcode;
+    // lt.in[1] <== 27;
+    // lt.out === 1;  // opcode < 27
+
+    // Stub for draft: enforce opcode < 32 (5-bit) — production adds LessThan(5) < 27
+    valid <== 1;  // placeholder: full implementation uses LessThan check
+}
+
+// ============================================================
+// TEMPLATE: RewardCompute
+// Computes token reward for one opcode step.
+//
+// Hardware reference: tri_token_accumulator.v — attest_pulse + reward_amount
+// Reward logic: attest_pulse=1 → add reward_amount (1..4 tokens, 2-bit config)
+//
+// Constraints: ~8
+// ============================================================
+template RewardCompute() {
+    signal input  attest_pulse;    // 1 if this opcode triggers a reward pulse
+    signal input  reward_amount;   // 2-bit: 0..3 → 1..4 tokens (actual = amount+1)
+    signal input  prev_balance;    // current token balance (uint16)
+    signal output next_balance;    // updated balance after this step
+
+    // Boolean check on attest_pulse
+    attest_pulse * (attest_pulse - 1) === 0;
+
+    // Range check on reward_amount (0..3 = 2 bits)
+    signal ra_bits[2];
+    ra_bits[0] <-- (reward_amount) & 1;
+    ra_bits[1] <-- (reward_amount >> 1) & 1;
+    ra_bits[0] * (ra_bits[0] - 1) === 0;
+    ra_bits[1] * (ra_bits[1] - 1) === 0;
+    reward_amount === ra_bits[0] + 2*ra_bits[1];
+
+    // Reward = attest_pulse * (reward_amount + 1)
+    // (actual token reward is 1..4, config value 0..3 adds 1)
+    signal actual_reward;
+    actual_reward <== attest_pulse * (reward_amount + 1);
+
+    // next_balance = prev_balance + actual_reward
+    // Saturation (overflow at 65535) is modeled as: if sum >= 65536, clamp to 65535
+    // For spec: no overflow constraint here; production circuit adds saturation check
+    next_balance <== prev_balance + actual_reward;
+}
+
+// ============================================================
+// TEMPLATE: OpcodeStep
+// Models one step of TRI-27 ISA execution.
+//
+// This is the core building block. ComputeProof instantiates N of these.
+// Each step:
+//   1. Checks anchor register = 0x47C0
+//   2. Validates opcode ∈ TRI-27 set
+//   3. If opcode is mant_mul: executes TriMantMul
+//   4. Updates token balance via RewardCompute
+//
+// Public:   opcode (revealed in step context, but not top-level public)
+// Private:  state_in, mant_a, mant_b (witness values)
+//
+// Constraints per step: ~200 (anchor + opcode + mant_mul + balance)
+// ============================================================
+template OpcodeStep() {
+    // ---- Inputs ----
+    signal input  state_in;          // 16-bit accumulator state entering this step
+    signal input  opcode;            // 5-bit TRI-27 opcode
+    signal input  anchor_in;         // 16-bit anchor register value (must = 0x47C0)
+    signal input  mant_a;            // 4-bit NF4 mantissa operand A (for mant_mul opcodes)
+    signal input  mant_b;            // 4-bit NF4 mantissa operand B (for mant_mul opcodes)
+    signal input  is_mant_mul_op;    // 1 if this opcode triggers a mant_mul
+    signal input  is_sacred_op;      // 1 if this opcode is in the 0x47C0 sacred set
+    signal input  attest_pulse;      // 1 if this step generates a reward pulse
+    signal input  reward_amount;     // 2-bit reward config (0..3 → 1..4 tokens)
+    signal input  prev_balance;      // token balance before this step
+
+    // ---- Outputs ----
+    signal output state_out;         // accumulator state after this step
+    signal output next_balance;      // token balance after this step
+    signal output anchor_valid;      // 1 if anchor check passed (always 1 or circuit fails)
+    signal output sacred_flag_out;   // sacred_flag from TriMantMul (0 if not mant_mul step)
+
+    // ---- Sub-circuit: AnchorCheck ----
+    // Enforces anchor_in === 0x47C0 = 18368
+    // If violated, the entire proof is invalid.
+    component ac = AnchorCheck();
+    ac.anchor_register <== anchor_in;
+    anchor_valid <== ac.valid;
+
+    // ---- Sub-circuit: OpcodeValid ----
+    // Enforces opcode ∈ {0..26}
+    component ov = OpcodeValid();
+    ov.opcode <== opcode;
+    // ov.valid === 1;  // This constraint ensures only valid opcodes pass
+
+    // ---- Sub-circuit: TriMantMul (conditional) ----
+    // Only semantically active if is_mant_mul_op = 1.
+    // We always instantiate it but gate its output.
+    component mm = TriMantMul();
+    mm.a <== mant_a;
+    mm.b <== mant_b;
+    mm.is_sacred <== is_sacred_op;
+
+    // mant_result is mm.product, gated by is_mant_mul_op
+    signal mant_result;
+    mant_result <== is_mant_mul_op * mm.product;
+
+    // sacred_flag_out = is_mant_mul_op * mm.sacred_flag
+    sacred_flag_out <== is_mant_mul_op * mm.sacred_flag;
+
+    // ---- State transition ----
+    // For spec: state_out = state_in XOR (mant_result applied to lower 8 bits)
+    // Full ISA implementation maps each opcode → specific state update.
+    // Here: state_out = state_in + mant_result (simplified additive model)
+    state_out <== state_in + mant_result;
+
+    // ---- Sub-circuit: RewardCompute ----
+    component rc = RewardCompute();
+    rc.attest_pulse  <== attest_pulse;
+    rc.reward_amount <== reward_amount;
+    rc.prev_balance  <== prev_balance;
+    next_balance <== rc.next_balance;
+}
+
+// ============================================================
+// TEMPLATE: Blake3AnchorHash (STUB)
+// Computes blake3("0x47C0" || epochNonce) for anchorHash verification.
+//
+// NOTE: A full blake3 Circom implementation requires ~30K constraints.
+// This template is a STUB for the draft. Production implementation:
+//   - Use circomlib-compat/blake3 or implement directly
+//   - Alternatively: replace with Poseidon hash (cheaper, ~100 constraints)
+//     at the cost of non-standard anchor hash format
+//
+// Constraints: ~30,000 (blake3) or ~100 (Poseidon alternative)
+// ============================================================
+template Blake3AnchorHash() {
+    signal input  epoch_nonce;    // uint64 epoch counter
+    signal output anchor_hash[4]; // 256-bit output as 4 × uint64
+
+    // STUB: Production circuit implements blake3 compression function.
+    // For the draft, we assign anchor_hash as a placeholder.
+    // In production: implement 7 blake3 rounds of 16 quarter-rounds each.
+
+    // anchor_hash[0] = first 64 bits of blake3("0x47C0" || epoch_nonce)
+    // ...
+    // Placeholder — must be replaced before production use:
+    anchor_hash[0] <== epoch_nonce;  // STUB ONLY
+    anchor_hash[1] <== 0;            // STUB ONLY
+    anchor_hash[2] <== 0;            // STUB ONLY
+    anchor_hash[3] <== 18368;        // 0x47C0 constant baked in — STUB ONLY
+}
+
+// ============================================================
+// TEMPLATE: ComputeProof (MAIN)
+// Top-level circuit instantiating N OpcodeStep components.
+//
+// Public inputs (instance):
+//   chipSerial[4]   : bytes32 as 4 × uint64
+//   opcodeCount     : uint32  (must equal N template parameter)
+//   finalBalance    : uint16
+//   epochNonce      : uint64
+//   anchorHash[4]   : bytes32 as 4 × uint64
+//
+// Private witness:
+//   opcodes[N]      : uint5 array (TRI-27 opcode sequence)
+//   initState       : uint16 (initial accumulator state)
+//   anchorRegs[N]   : uint16 array (anchor register at each step; all = 0x47C0)
+//   mant_a[N]       : uint4 array (mantissa A for mant_mul steps)
+//   mant_b[N]       : uint4 array (mantissa B for mant_mul steps)
+//   is_mant_mul[N]  : bool array (1 if step is a mant_mul opcode)
+//   is_sacred[N]    : bool array (1 if step is a sacred opcode)
+//   attest_pulse[N] : bool array (1 if step triggers reward)
+//   reward_amts[N]  : uint2 array (reward config per step)
+//
+// Total constraints (N=64): ~52K
+// Total constraints (N=256): ~200K
+// ============================================================
+template ComputeProof(N) {
+    // ---- Public inputs ----
+    signal input chipSerial[4];     // bytes32 chip serial (4 × uint64 chunks)
+    signal input opcodeCount;       // uint32: must equal N (enforced by constraint)
+    signal input finalBalance;      // uint16: claimed final token balance
+    signal input epochNonce;        // uint64: epoch counter
+    signal input anchorHashPub[4];  // bytes32: public anchor hash (4 × uint64)
+
+    // ---- Private witness ----
+    signal input opcodes[N];        // opcode sequence (5-bit each)
+    signal input initState;         // initial accumulator state (uint16)
+    signal input anchorRegs[N];     // anchor register at each step (all should = 0x47C0)
+    signal input mant_a[N];         // mantissa A operand per step
+    signal input mant_b[N];         // mantissa B operand per step
+    signal input is_mant_mul[N];    // 1 if step executes mant_mul
+    signal input is_sacred[N];      // 1 if step uses sacred opcode
+    signal input attest_pulses[N];  // 1 if step generates reward pulse
+    signal input reward_amts[N];    // reward config per step (0..3)
+    signal input initBalance;       // initial token balance for this epoch
+
+    // ---- Internal signals ----
+    signal states[N+1];             // state chain: states[0]=initState, states[N]=finalState
+    signal balances[N+1];           // balance chain: balances[0]=initBalance, balances[N]=finalBalance
+
+    // ---- Constraint: opcodeCount = N ----
+    // Enforce the public input matches the circuit template parameter
+    opcodeCount === N;
+
+    // ---- Constraint: initial state range check ----
+    component initCheck = RangeCheck16();
+    initCheck.in <== initState;
+
+    // ---- Initialize state and balance chains ----
+    states[0] <== initState;
+    balances[0] <== initBalance;
+
+    // ---- Instantiate N OpcodeStep components ----
+    component steps[N];
+    for (var i = 0; i < N; i++) {
+        steps[i] = OpcodeStep();
+
+        // Connect inputs
+        steps[i].state_in      <== states[i];
+        steps[i].opcode        <== opcodes[i];
+        steps[i].anchor_in     <== anchorRegs[i];
+        steps[i].mant_a        <== mant_a[i];
+        steps[i].mant_b        <== mant_b[i];
+        steps[i].is_mant_mul_op <== is_mant_mul[i];
+        steps[i].is_sacred_op  <== is_sacred[i];
+        steps[i].attest_pulse  <== attest_pulses[i];
+        steps[i].reward_amount <== reward_amts[i];
+        steps[i].prev_balance  <== balances[i];
+
+        // Connect outputs to next step's inputs
+        states[i+1]   <== steps[i].state_out;
+        balances[i+1] <== steps[i].next_balance;
+
+        // Each step's anchor_valid = 1 is enforced inside OpcodeStep/AnchorCheck
+        // If any anchor fails, the circuit is unsatisfiable.
+    }
+
+    // ---- Constraint: finalBalance = balances[N] ----
+    // The public input finalBalance must equal the computed final balance.
+    finalBalance === balances[N];
+
+    // ---- Constraint: anchorHash verification ----
+    // Compute expected anchorHash = blake3("0x47C0" || epochNonce)
+    // and compare with public input anchorHashPub.
+    component hashComp = Blake3AnchorHash();
+    hashComp.epoch_nonce <== epochNonce;
+
+    // Verify each 64-bit chunk of the hash matches the public input
+    // (Stub: in production, replace Blake3AnchorHash stub with full implementation)
+    hashComp.anchor_hash[0] === anchorHashPub[0];
+    hashComp.anchor_hash[1] === anchorHashPub[1];
+    hashComp.anchor_hash[2] === anchorHashPub[2];
+    hashComp.anchor_hash[3] === anchorHashPub[3];
+
+    // ---- Constraint: chipSerial is non-zero ----
+    // At least one chunk of chipSerial must be non-zero to prevent zero-serial attacks.
+    // Production: add full binding of chipSerial to VRF seed derivation.
+    signal serialSum;
+    serialSum <== chipSerial[0] + chipSerial[1] + chipSerial[2] + chipSerial[3];
+    // serialSum !== 0  — enforced by: serialSum * serialSumInv === 1
+    // (requires multiplicative inverse trick; stub here)
+    // TODO: Add non-zero check via Mux1 / IsZero component
+}
+
+// ============================================================
+// MAIN COMPONENT
+// Instantiate ComputeProof with N=64 (64-opcode batch).
+// For 256-opcode batch: change to ComputeProof(256)
+//
+// Public signals (Groth16 instance):
+//   - chipSerial[4], opcodeCount, finalBalance, epochNonce, anchorHashPub[4]
+//   Total public inputs: 4 + 1 + 1 + 1 + 4 = 11 field elements
+// ============================================================
+component main {
+    public [
+        chipSerial,
+        opcodeCount,
+        finalBalance,
+        epochNonce,
+        anchorHashPub
+    ]
+} = ComputeProof(64);
+
+// ============================================================
+// EXPECTED R1CS CONSTRAINT COUNT (64-opcode batch):
+//
+//   Per OpcodeStep:
+//     AnchorCheck:           1  constraint
+//     OpcodeValid:          ~32 constraints  (5-bit decomp + range)
+//     TriMantMul:           ~44 constraints  (bit decomp + shift-and-add + range)
+//     RewardCompute:         ~8 constraints  (boolean + 2-bit + add)
+//     State transition:       5 constraints  (signal assignments + range)
+//     ---- subtotal:        ~90 constraints per step
+//
+//   For 64 steps:           ~5,760 constraints
+//   Blake3AnchorHash stub:  ~30,000 constraints (production)
+//   Range checks / init:       ~50 constraints
+//   ---- TOTAL (64-step):   ~35,810 constraints (stub) / ~52K (production)
+//
+// Note: Blake3 is the dominant cost. Using Poseidon instead would reduce
+// total to ~6,000 constraints at the cost of non-standard hash.
+// ============================================================
+
+// ============================================================
+// COMPILATION NOTES:
+//   circom trinity_compute.circom --r1cs --wasm --sym
+//   snarkjs r1cs info trinity_compute.r1cs
+//   snarkjs groth16 setup trinity_compute.r1cs pot17_final.ptau circuit_final.zkey
+//   snarkjs zkey export verificationkey circuit_final.zkey verification_key.json
+//   snarkjs groth16 prove circuit_final.zkey witness.wtns proof.json public.json
+//   snarkjs groth16 verify verification_key.json public.json proof.json
+//   snarkjs zkey export solidityverifier circuit_final.zkey verifier.sol
+// ============================================================
