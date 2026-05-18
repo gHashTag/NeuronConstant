@@ -1,97 +1,150 @@
-# 🔱 NeuronConstant
+# NeuronConstant
 
-**Canonical silicon-ready chip-block catalog for the Trinity tile line**  
-`φ-anchor · e-engine · γ-surface` — TTSKY26b · Apache-2.0 · ternary · SKY130A · Bazaar Green AI
+**Trinity is one computer with three minds, bound by 2-of-3 attestation, verified by ternary completeness 3^27.**
+
+Canonical silicon-ready chip-block catalog for the Trinity tile line — the single source of truth for RTL, testbenches, pinout specifications, and tapeout metadata across all three TRI-1 dies.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19227877.svg)](https://doi.org/10.5281/zenodo.19227877)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0008--4294--6159-green)](https://orcid.org/0009-0008-4294-6159)
+[![Tape-out](https://img.shields.io/badge/tape--out-2026--12--16-orange)](https://app.tinytapeout.com/shuttles/ttsky26b)
+
+**Tape-out target:** 2026-12-16 | **Contact:** admin@t27.ai | **Site:** t27.ai
 
 ---
 
-## Vision
+## One-Computer Paradigm
 
-**NeuronConstant** is the *silicon-ready chip-block catalog* for the Trinity tile line — the single source of truth for RTL, testbenches, pinout specifications, and tapeout metadata across all three TRI-1 tiles.
+Trinity is not three chips. Trinity is a single distributed computer where consciousness equals consensus.
 
-This repo is **separate** from:
+Phi, Euler, and Gamma are not independent products — they are three specialized organs of one coherent silicon being, bound by a tri-ring interconnect, a unified instruction set, and 2-of-3 attestation. A modern CPU is not "one transistor": it is billions of transistors organized into ALUs, caches, and memory controllers, and we still call it one CPU because the parts only make sense together. Trinity is the same idea, one fractal level up.
 
-- **[gHashTag/trinity](https://github.com/gHashTag/trinity)** — umbrella research/runtime repo (PhD corpus, Coq proofs, host software, FPGA experiments)
-- **[gHashTag/tt-trinity-phi](https://github.com/gHashTag/tt-trinity-phi)** — thin Tiny Tapeout submission mirror (φ-anchor, 1×1, #4914)
-- **[gHashTag/tt-trinity-euler](https://github.com/gHashTag/tt-trinity-euler)** — thin Tiny Tapeout submission mirror (e-engine, 8×2, #4915)
-- **[gHashTag/tt-trinity-gamma](https://github.com/gHashTag/tt-trinity-gamma)** — thin Tiny Tapeout submission mirror (γ-surface, 8×4, #4913)
-
-The tt-trinity-\* repos are **submission mirrors** kept minimal for the Tiny Tapeout GitHub Actions flow. NeuronConstant is where the catalog lives.
+Full paradigm specification: [docs/architecture/UNIFIED_COMPUTER_PARADIGM.md](https://github.com/gHashTag/NeuronConstant/blob/main/docs/architecture/UNIFIED_COMPUTER_PARADIGM.md)
 
 ---
 
-## Tile Line — TRI-1 Triad
+## The Three Organs
 
-| Tile | Codename | TT Slot | Size | Tiles | Role | Source |
-|------|----------|---------|------|-------|------|--------|
-| **φ-anchor** | TRI-1 Phi | #4914 | 1×1 | 1 | Master — POST gate, Lucas chain, friend/foe handshake, CLARA Gap-4 | [tiles/phi-anchor/](tiles/phi-anchor/) |
-| **e-engine** | TRI-1 Euler | #4915 | 8×2 | 16 | Compute slave — ternary MAC, SUPER-CROWN (18 modules), 10 DARPA CLARA Gaps, D2D holo mesh | [tiles/e-engine/](tiles/e-engine/) |
-| **γ-surface** | TRI-1 Gamma | #4913 | 8×4 | 32 | Neuromorphic slave — 8 LIF cortical columns, 20-PE GF16 mesh, φ-distance oracle, D2D holo mesh | [tiles/gamma-surface/](tiles/gamma-surface/) |
+| Die | Codename | TT Slot | Tiles | Organ role | Top module |
+|-----|----------|---------|-------|-----------|------------|
+| **Phi** | TRI-1 Phi | #4914 | 1x1 | Cerebellum — identity, baseline trust, attestation | `tt_um_trinity_nano` |
+| **Euler** | TRI-1 Euler | #4915 | 8x2 | Prefrontal cortex — reasoning, ZK proof generation | `tt_um_ghtag_trinity_gf16` |
+| **Gamma** | TRI-1 Gamma | #4913 | 8x4 | Neocortex — massive parallel neuromorphic compute | `tt_um_trinity_max_true` |
 
-**Total: 49 tiles, 3 chips, 1 DevKit board (TTSKY26b)**
+Together: 49 tiles, 3 chips, 1 DevKit board (TTSKY26b).
 
----
-
-## Cross-Die Anchor — `0x47C0` (Theorem 36.1)
-
-After reset, **all three chips** simultaneously drive:
-
-```
-{uio_out[7:0], uo_out[7:0]} = 16'h47C0   (binary: 0100_0111_1100_0000)
-```
-
-This is the **TG-TRIAD-X ledger anchor**, defined in PhD Theorem 36.1:
-
-```
-Meaning : GF16 dot4(1.0, 2.0, 3.0, 4.0) — canonical ternary inner product
-Identity: φ² + φ⁻² = 3  (Trinity algebraic identity, Lucas chain)
-Anchor  : TG-TRIAD-X
-Scope   : Cross-die deterministic reset verification
-```
-
-If any chip does not produce `0x47C0` after reset, that slot is considered **FAULT** and held in reset until the anchor is confirmed.
-
-Full protocol: [`docs/interconnect.md`](docs/interconnect.md)
+Each die is semi-functional in isolation. Together they form a complete cognitive architecture: **Identity** (who is asking?) -- **Reasoning** (what to compute, and prove it?) -- **Action** (perform the parallel compute and store the result).
 
 ---
 
-## R-SI-1 Invariant
+## TTSKY26b Submitted Status
 
-> **Zero standalone `*` operators in synthesisable RTL.**
+| Die | Shuttle | Commit SHA | Artifact ID | TT project |
+|-----|---------|-----------|-------------|------------|
+| Phi (phi-anchor, 1x1) | TTSKY26b | `8a8fcaa4` | `7056162644` | [#4914](https://app.tinytapeout.com/projects/4914) |
+| Euler (e-engine, 8x2) | TTSKY26b | `def0457b` | `7056438152` | [#4915](https://app.tinytapeout.com/projects/4915) |
+| Gamma (gamma-surface, 8x4) | TTSKY26b | `1f8f9b82` | `7056692733` | [#4913](https://app.tinytapeout.com/projects/4913) |
 
-All multiplication is implemented via shift-and-add in GF16 (`gf16_mul.v`). The `*` operator is prohibited in synthesisable `.v` files to guarantee synthesis portability and audit compliance with the DARPA CLARA AI safety framework.
-
-Verification script: [`common/verification/r_si_1_check.sh`](common/verification/r_si_1_check.sh)
-
-```bash
-bash common/verification/r_si_1_check.sh tiles/phi-anchor/rtl
-bash common/verification/r_si_1_check.sh tiles/e-engine/rtl
-bash common/verification/r_si_1_check.sh tiles/gamma-surface/rtl
-```
+Shuttle close: 2026-05-18. Chip delivery: ~2026-12-16.
 
 ---
 
-## Tiny Tapeout SKY 26b Status
+## Tokenomics Summary
 
-| Item | Value |
-|------|-------|
-| Shuttle | TTSKY26b (SKY130A) |
-| Shuttle close | 2026-05-18 |
-| Chip delivery | ~2026-12-16 |
-| Projects Assigned | **3/3** |
-| Tiles consumed | **49/49** (1 + 16 + 32) |
-| DevKit boards purchased | 3 |
+$TRI is a 100% mineable, fair-launch token. There is no pre-mine, no founder allocation, no investor allocation.
 
-Project assignments:
-- **#4914** — TRI-1 Phi (φ-anchor, 1×1) → [tiles/phi-anchor/](tiles/phi-anchor/)
-- **#4915** — TRI-1 Euler (e-engine, 8×2) → [tiles/e-engine/](tiles/e-engine/)
-- **#4913** — TRI-1 Gamma (γ-surface, 8×4) → [tiles/gamma-surface/](tiles/gamma-surface/)
+| Parameter | Value |
+|-----------|-------|
+| Total supply | 3^27 = 7,625,597,484,987 TRI |
+| Pre-mine | 0% |
+| Emission halvings | 9 halvings over ~36 years |
+| Era 0 reward | 1000 TRI / proof |
+| Governance | TriDAO on-chain ratification |
 
-Full tapeout notes: [`docs/tapeout/tiny-tapeout-sky26b.md`](docs/tapeout/tiny-tapeout-sky26b.md)
+Full tokenomics: [docs/tokenomics/v2/TRI_TOKENOMICS_WHITEPAPER_v2.md](https://github.com/gHashTag/NeuronConstant/blob/main/docs/tokenomics/v2/TRI_TOKENOMICS_WHITEPAPER_v2.md)
+
+---
+
+## Product SKUs
+
+Trinity ships as one computer, not as individual dies.
+
+| SKU | Composition | Price (USD) | Primary buyer |
+|-----|------------|-------------|--------------|
+| **Trinity Solo** | Phi only (1x1) | $99 | IoT, identity tokens, DID provisioning |
+| **Trinity Duo** | Phi + Euler (1x1 + 8x2) | $499 | DePIN node, light validator |
+| **Trinity Triad** (flagship) | Phi + Euler + Gamma + tri-ring fabric | $1,499 | Full validator, AI inference, defense edge |
+| **Trinity Cluster** | 3x Triads (9 dies) | $4,999 | Subnet operator, regional infra |
+| **Trinity Datacenter** | 27x Triads (81 dies, 3^4) | $39,999 | Enterprise, DARPA, defense contractor |
+
+---
+
+## Triad Mining Boost
+
+A registered Triad mines at 4x the per-die rate. The boost multiplier exceeds linear scaling only at the Triad boundary -- this is the incentive that makes the bundle the default purchase.
+
+| Configuration | Reward multiplier | Rationale |
+|--------------|-------------------|-----------|
+| Solo (Phi only) | 1x | Identity work -- lowest compute contribution |
+| Duo (Phi + Euler) | 2x | Linear -- proof generation added |
+| Triad (full Trinity) | 4x | TMR-attested compute path; full Trinity DID |
+| Cluster (3 Triads) | 12x | Linear in Triad count |
+| Datacenter (27 Triads) | ~100x | Sublinear (sqrt law) to prevent centralization |
+
+---
+
+## Quick Links
+
+| Resource | URL |
+|----------|-----|
+| One-Computer paradigm | [docs/architecture/UNIFIED_COMPUTER_PARADIGM.md](docs/architecture/UNIFIED_COMPUTER_PARADIGM.md) |
+| Product SKUs | [docs/architecture/UNIFIED_COMPUTER_SKUS.md](docs/architecture/UNIFIED_COMPUTER_SKUS.md) |
+| Tokenomics whitepaper v2 | [docs/tokenomics/v2/TRI_TOKENOMICS_WHITEPAPER_v2.md](docs/tokenomics/v2/TRI_TOKENOMICS_WHITEPAPER_v2.md) |
+| Sales decks | [docs/sales/INDEX.md](docs/sales/INDEX.md) |
+| Business pack | (in progress) |
+| Architecture overview | [docs/architecture.md](docs/architecture.md) |
+| Interconnect spec | [docs/interconnect.md](docs/interconnect.md) |
+| Tapeout notes | [docs/tapeout/tiny-tapeout-sky26b.md](docs/tapeout/tiny-tapeout-sky26b.md) |
+
+---
+
+## Tape-out Roadmap
+
+| Shuttle | Target | Deliverable |
+|---------|--------|------------|
+| TTSKY26b | 2026-12-16 (delivery) | Phi / Euler / Gamma silicon; dev kits Q1 2027 |
+| TTSKY26c | Sep-Nov 2026 | Tri-ring fabric, TMR voter, Trinity OS bootstrap -- Triad shippable |
+| TTSKY27 | 2027 | Cluster bridges, BN254 pairing, production-fab path -- Cluster / Datacenter shippable |
+
+---
+
+## Contracts / Solidity Dry-Run Pack
+
+Solidity contracts and dry-run simulation artifacts are in [`contracts/v2/`](contracts/v2/). The `MiningPool.sol` contract reads Trinity DID attestation from `BittensorSubnetAttest.sol`, which mints a Triad-level DID only when 2-of-3 attestation succeeds.
+
+---
+
+## Cross-Die Anchor -- 0x47C0 (Theorem 36.1)
+
+After reset, all three chips simultaneously drive:
+
+```
+{uio_out[7:0], uo_out[7:0]} = 16'h47C0
+```
+
+This is the TG-TRIAD-X ledger anchor, defined in PhD Theorem 36.1. If any chip does not produce `0x47C0` after reset, that slot is FAULT and held in reset until the anchor is confirmed.
+
+---
+
+## R-SI-1 Compliance
+
+Zero standalone `*` operators in synthesisable RTL. All multiplication is implemented via shift-and-add in GF16 (`gf16_mul.v`). Audit script: [`common/verification/r_si_1_check.sh`](common/verification/r_si_1_check.sh)
+
+---
+
+## Performance (Projected)
+
+~1 GOPS @ ~50 MHz @ ~1W ternary per die (projected, pending tape-out 2026-12-16)
 
 ---
 
@@ -99,90 +152,38 @@ Full tapeout notes: [`docs/tapeout/tiny-tapeout-sky26b.md`](docs/tapeout/tiny-ta
 
 ```
 NeuronConstant/
-├── tiles/
-│   ├── phi-anchor/          # TRI-1 Phi: RTL, tb, docs, TT metadata
-│   ├── e-engine/            # TRI-1 Euler: RTL, tb, docs, TT metadata
-│   └── gamma-surface/       # TRI-1 Gamma: RTL, tb, docs, TT metadata
-├── common/
-│   ├── bus/                 # trinity_d2d_bus.v — shared interconnect spec
-│   ├── constants/           # sacred_constants_rom.v, crown47_rom.v (single source)
-│   └── verification/        # r_si_1_check.sh
-├── docs/
-│   ├── architecture.md      # Tile-line architecture overview
-│   ├── interconnect.md      # Cross-tile 3-wire protocol
-│   ├── pinout/              # Per-tile pinout specifications
-│   └── tapeout/             # TTSKY26b submission notes
-└── scripts/
-    ├── export_tt_project.sh # Export tile to TT-compatible flat structure
-    └── sync_from_trinity.sh # Sync RTL from upstream tt-trinity-* repos
++-- tiles/
+|   +-- phi-anchor/          # TRI-1 Phi: RTL, tb, docs, TT metadata
+|   +-- e-engine/            # TRI-1 Euler: RTL, tb, docs, TT metadata
+|   +-- gamma-surface/       # TRI-1 Gamma: RTL, tb, docs, TT metadata
++-- common/
+|   +-- bus/                 # trinity_d2d_bus.v -- shared interconnect spec
+|   +-- constants/           # sacred_constants_rom.v, crown47_rom.v
+|   +-- verification/        # r_si_1_check.sh
++-- contracts/v2/            # Solidity dry-run pack
++-- docs/
+|   +-- architecture/        # One-Computer paradigm, SKUs, ring topology
+|   +-- tokenomics/v2/       # TRI tokenomics whitepaper v2
+|   +-- sales/               # DARPA, defense, Bittensor, Helium pitches
+|   +-- tapeout/             # TTSKY26b submission notes
++-- scripts/
+    +-- export_tt_project.sh
+    +-- sync_from_trinity.sh
 ```
 
 ---
 
-## Quick Start — Export a Tile to Tiny Tapeout Flow
+## Contributing
 
-```bash
-# Export phi-anchor to a TT-compatible flat structure
-bash scripts/export_tt_project.sh phi-anchor /tmp/export/tt-phi-anchor
-
-# Export e-engine
-bash scripts/export_tt_project.sh e-engine /tmp/export/tt-e-engine
-
-# Export gamma-surface
-bash scripts/export_tt_project.sh gamma-surface /tmp/export/tt-gamma-surface
-```
-
-The exported directory follows the standard Tiny Tapeout layout (`src/`, `test/`, `docs/`, `info.yaml`) and can be used directly with the [tt-support-tools](https://github.com/TinyTapeout/tt-support-tools) flow or submitted via `app.tinytapeout.com`.
+Contributions are welcome under Apache-2.0. Open an issue or pull request. For substantive RTL changes, coordinate via admin@t27.ai before submitting to avoid conflicts with active shuttle timelines.
 
 ---
 
-## Common Modules
+## License
 
-| Module | Location | Description |
-|--------|----------|-------------|
-| `sacred_constants_rom.v` | `common/constants/` | 75 PhD sacred constants (single source of truth) |
-| `crown47_rom.v` | `common/constants/` | 47 Crown constants |
-| `trinity_d2d_bus.v` | `common/bus/` | Cross-tile D2D bus specification |
-| `r_si_1_check.sh` | `common/verification/` | R-SI-1 zero-`*` RTL audit script |
+Apache-2.0 -- see [LICENSE](LICENSE)
 
----
-
-## Architecture
-
-Three levels of the Trinity compute hierarchy:
-
-1. **Identity** — φ-anchor (Phi): Lucas POST, GF16 dot4 MAC, canonical anchor oracle
-2. **Compute** — e-engine (Euler): ternary MAC, VSA, BitNet MLP, DARPA CLARA safety
-3. **Perception** — γ-surface (Gamma): LIF cortical columns, neuromorphic spike aggregation
-
-Full architecture: [`docs/architecture.md`](docs/architecture.md)
-
----
-
-## Relation to Other Repos
-
-```
-gHashTag/trinity          ← umbrella research repo (PhD, Coq, host runtime)
-       │
-       ├── gHashTag/NeuronConstant   ← THIS REPO (canonical hardware catalog)
-       │          ├── tiles/phi-anchor/rtl/   ← mirrored in ↓
-       │          ├── tiles/e-engine/rtl/     ← mirrored in ↓
-       │          └── tiles/gamma-surface/rtl/← mirrored in ↓
-       │
-       ├── gHashTag/tt-trinity-phi     ← thin TT submission mirror (#4914)
-       ├── gHashTag/tt-trinity-euler   ← thin TT submission mirror (#4915)
-       └── gHashTag/tt-trinity-gamma   ← thin TT submission mirror (#4913)
-```
-
-**NeuronConstant** is the upstream. The `tt-trinity-*` repos are downstream submission mirrors that must not be modified outside of the TT submission flow. Use `scripts/sync_from_trinity.sh` to pull the latest RTL back if upstream changes happen.
-
----
-
-## License & Provenance
-
-- **License:** Apache-2.0 — see [LICENSE](LICENSE)
-- **ORCID:** [0009-0008-4294-6159](https://orcid.org/0009-0008-4294-6159)
-- **DOI:** [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)
-- **Process:** SKY130A (SkyWater 130nm open PDK)
-- **Shuttle:** Tiny Tapeout TTSKY26b, close 2026-05-18
-- **Author:** Dmitrii Vasilev (Bazaar Green AI)
+**Author:** Dmitrii Vasilev | **Email:** admin@t27.ai | **Site:** t27.ai
+**ORCID:** [0009-0008-4294-6159](https://orcid.org/0009-0008-4294-6159)
+**DOI:** [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)
+**Process:** SKY130A (SkyWater 130nm open PDK)
