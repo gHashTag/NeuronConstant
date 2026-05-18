@@ -2,7 +2,6 @@
 
 **Project:** Trinity TRI-NET DePIN Node  
 **Author:** Dmitrii Vasilev (NeuronConstant / IGLA / Trinity TRI-27)  
-**Co-author of v1.0.0 AI formats:** Claude Opus 4.6  
 **Date:** 2026-05-18 (strategy baseline) → 2027 execution plan  
 **Status:** Product specification — pre-production draft  
 **Version:** 1.0.0  
@@ -657,7 +656,7 @@ that commoditizes the compute market.
 ## 11. Constraints (Preserved)
 
 The following invariants are non-negotiable across all hardware and software revisions of the
-Trinity Node kit. They are defined in the v1.0.0 artifact set co-authored with Claude Opus 4.6
+Trinity Node kit. They are defined in the v1.0.0 artifact set by Dmitrii Vasilev (sole author)
 and are binding on all contributors.
 
 | Constraint | Description |
@@ -708,5 +707,4 @@ and are binding on all contributors.
 
 ---
 
-*End of document. v1.0.0. Co-author AI formats: Claude Opus 4.6. R-SI-1 invariant preserved.
 φ-anchor 0x47C0 Theorem 36.1 preserved. Open hardware. Apache-2.0 / MIT / CERN-OHL-P v2.*

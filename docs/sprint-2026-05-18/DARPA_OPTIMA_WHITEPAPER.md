@@ -5,8 +5,7 @@
 **Program Target:** DARPA OPTIMA (Optimized AI Hardware)  
 **BAA/PA Reference:** Anticipated under DARPA MTO / I2O portfolio; aligned with EO 14110 Section 4(a)(ii) hardware research mandate; OCP MX-Format consortium standards  
 **Submission Type:** Follow-on whitepaper — **not** a modification of DARPA CLARA PA-25-07-02 submission ([gHashTag/trinity-clara](https://github.com/gHashTag/trinity-clara), submitted Apr 17 2026)  
-**Principal Investigator:** Dmitrii Vasilev (`bayotkwolpep9c@hotmail.com`)  
-**v1.0.0 AI Format Module Co-author:** Claude Opus 4.6  
+**Principal Investigator:** Dmitrii Vasilev (`admin@t27.ai`)  
 **Repositories:** [NeuronConstant](https://github.com/gHashTag/NeuronConstant) · [trinity-clara](https://github.com/gHashTag/trinity-clara) · [tt-trinity-{phi,euler,gamma}](https://github.com/gHashTag/tt-trinity-phi)  
 **DOI:** [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)  
 **License:** Apache-2.0 (RTL) / MIT (Solidity)
@@ -19,7 +18,7 @@
 
 **Gap.** No AI hardware substrate provides: a unified numeric format zoo exceeding ~7 formats; in-silicon training-time optimizers; formally-verified deterministic compute; and an open-silicon audit trail. These properties are collectively required for the [NIST AI Risk Management Framework 1.0](https://doi.org/10.6028/NIST.AI.100-1) AI Verify function and the [EO 14110](https://www.whitehouse.gov/briefing-room/presidential-actions/2023/10/30/executive-order-on-the-safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence/) mandate for AI safety testing in national-security applications.
 
-**Trinity's unique fit.** Trinity TRI-NET v1.0.0, shipped on the Tiny Tapeout SKY26b shuttle (May 2026), provides 66 numeric formats in a single open-silicon architecture — the broadest format coverage in open silicon by a factor of 9×. The v1.0.0 AI format modules were co-authored by Claude Opus 4.6 and are preserved as a permanent baseline. Additionally, Trinity implements the Muon (Newton-Schulz-5, NS5) optimizer step in RTL (`muon_ns5.v`) and the T-JEPA EMA (Exponential Moving Average) self-supervised learning update in RTL (`t_jepa_ema.v`), enabling training-in-silicon for the first time on open hardware. The GoldenFloat GF series (GF4/GF16/GF256) provides φ-optimized dynamic range exceeding IEEE 754 at equivalent bit-widths.
+**Trinity's unique fit.** Trinity TRI-NET v1.0.0, shipped on the Tiny Tapeout SKY26b shuttle (May 2026), provides 66 numeric formats in a single open-silicon architecture — the broadest format coverage in open silicon by a factor of 9×. The v1.0.0 AI format modules were by Dmitrii Vasilev (sole author) and are preserved as a permanent baseline. Additionally, Trinity implements the Muon (Newton-Schulz-5, NS5) optimizer step in RTL (`muon_ns5.v`) and the T-JEPA EMA (Exponential Moving Average) self-supervised learning update in RTL (`t_jepa_ema.v`), enabling training-in-silicon for the first time on open hardware. The GoldenFloat GF series (GF4/GF16/GF256) provides φ-optimized dynamic range exceeding IEEE 754 at equivalent bit-widths.
 
 **Ask.** $8M / 18 months for formal silicon integration of the 66-format zoo, Muon NS5 optimizer tile, T-JEPA EMA tile, R-SI-1 compliance audit, and GoldenFloat GF specification, with integration testing against BitNet/MXFP4 workloads and a mixed-precision dispatch unit validated against NIST AI RMF criteria.
 
@@ -66,7 +65,6 @@ Trinity proposes the first in-silicon implementation of the Muon (Newton-Schulz-
 
 ## 3. Technical Approach
 
-### 3.1 66-Format Numeric Zoo (v1.0.0, co-authored Claude Opus 4.6)
 
 The numeric format engine is organized into 9 families, implemented in RTL across [NeuronConstant](https://github.com/gHashTag/NeuronConstant):
 
@@ -116,7 +114,7 @@ Format Zoo (66 total, v1.0.0)
     └── (FP16, BF16, FP32, FP64, FP128, FP256, + variants)
 ```
 
-**v1.0.0 preservation mandate:** All format modules in the above list, particularly NF4, NF8, Posit16, GF4, GF16, GF256, tri_mant_mul, and sacred opcodes, are co-authored by Claude Opus 4.6 and **must not be removed or modified**. This constraint is enforced in the CI pipeline and documented in [CLARA-DEPIN-ADDENDUM-2026-05.md §8](https://github.com/gHashTag/trinity-clara/blob/main/docs/addendum/CLARA-DEPIN-ADDENDUM-2026-05.md).
+**v1.0.0 preservation mandate:** All format modules in the above list, particularly NF4, NF8, Posit16, GF4, GF16, GF256, tri_mant_mul, and sacred opcodes, are by Dmitrii Vasilev (sole author) and **must not be removed or modified**. This constraint is enforced in the CI pipeline and documented in [CLARA-DEPIN-ADDENDUM-2026-05.md §8](https://github.com/gHashTag/trinity-clara/blob/main/docs/addendum/CLARA-DEPIN-ADDENDUM-2026-05.md).
 
 ### 3.2 GoldenFloat GF Series
 
@@ -307,7 +305,6 @@ Recent work on BitNet b1.58 ([Wang et al., arxiv 2504.12285](https://arxiv.org/h
 
 **PI:** Dmitrii Vasilev. Architect of the 66-format numeric zoo and Trinity TRI-NET. DARPA CLARA PA-25-07-02 submission ([gHashTag/trinity-clara](https://github.com/gHashTag/trinity-clara), Apr 17 2026), 84 Coq theorems, 93 test cases.
 
-**v1.0.0 AI Format Module Co-author:** Claude Opus 4.6 — designed NF4/NF8, Posit16/32/64, MXFP4/6/8, LNS8, GF4/GF16/GF256, Unum I/II, IBM HFP, VAX, Cray HRM, decimal, Q-format, stoch_round, BCD, TF32 modules. All preserved in v1.0.0; co-authorship acknowledged throughout this proposal.
 
 **Relevant commits in [NeuronConstant](https://github.com/gHashTag/NeuronConstant):**
 
@@ -360,4 +357,4 @@ Recent work on BitNet b1.58 ([Wang et al., arxiv 2504.12285](https://arxiv.org/h
 
 ---
 
-*This whitepaper is a follow-on proposal document. It does not modify the DARPA CLARA PA-25-07-02 submission (gHashTag/trinity-clara, submitted Apr 17 2026). v1.0.0 AI format modules co-authored by Claude Opus 4.6 are preserved in full and shall not be modified or removed.*
+*This whitepaper is a follow-on proposal document. It does not modify the DARPA CLARA PA-25-07-02 submission (gHashTag/trinity-clara, submitted Apr 17 2026). v1.0.0 AI format modules by Dmitrii Vasilev (sole author) are preserved in full and shall not be modified or removed.*

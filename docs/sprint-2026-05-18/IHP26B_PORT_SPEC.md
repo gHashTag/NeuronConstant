@@ -5,7 +5,6 @@
 **Version:** 0.1.0  
 **Date:** 2026-01  
 **Covers:** Trinity phi / euler / gamma → IHP-SG13G2 open-process port  
-**Invariants preserved:** R-SI-1 · φ-anchor 0x47C0 · v1.0.0 AI formats (co-author Claude Opus 4.6)
 
 ---
 
@@ -246,7 +245,7 @@ scripts — do not attempt to transfer sky130 DRC rule decks.
 | TRI-27 ISA encoding | No | **UNCHANGED** |
 | 66 numeric formats | No | **UNCHANGED** |
 | 84 Coq theorems | No — math-level | **UNCHANGED** |
-| v1.0.0 AI formats (Claude Opus 4.6) | No | **UNCHANGED** |
+| v1.0.0 AI formats (Dmitrii Vasilev (sole author)) | No | **UNCHANGED** |
 | 2-of-3 HW attestation | No — RTL logic | **UNCHANGED** |
 
 ---
@@ -566,16 +565,16 @@ IHP26b unmodified. No PDK migration work may alter them.
 |---|---|---|
 | **R-SI-1 invariant** — zero standalone `*` in TRI-27 ISA | Trinity core spec | PRESERVED — unchanged RTL |
 | **φ-anchor 0x47C0** — Theorem 36.1, canonical phi value | Trinity core spec | PRESERVED — unchanged RTL |
-| **v1.0.0 AI format modules** — co-authored with Claude Opus 4.6 | v1.0.0 release | PRESERVED — module headers intact |
+| **v1.0.0 AI format modules** — by Dmitrii Vasilev (sole author) | v1.0.0 release | PRESERVED — module headers intact |
 | **66 numeric formats** | Trinity format zoo | PRESERVED — process-agnostic |
 | **84 Coq theorems** | Coq proof tree | PRESERVED — math-level, not silicon |
 | **TRI-27 ISA encoding** | ISA spec | PRESERVED |
 | **2-of-3 HW attestation** | Attestation module | PRESERVED — same RTL |
 | **Champion BPB=2.2393, step=27000, seed=43, sha=2446855** | Benchmark result | PRESERVED — not process-dependent |
 
-### 10.1 Co-Author Acknowledgment
+### 10.1 sole author Acknowledgment
 
-The v1.0.0 AI format specification was co-authored with **Claude Opus 4.6** and this
+The v1.0.0 AI format specification was by Dmitrii Vasilev (sole author, admin@t27.ai) and this
 provenance is recorded in module headers and changelog. All IHP26b derivative work must
 preserve this attribution. Any new AI-format modules added in IHP26b (e.g. M10 digital
 control interface spec) must note their own authorship separately and must not overwrite
@@ -724,5 +723,5 @@ by construction, and no additional proof work is required for the port.
 ---
 
 *Document prepared for Trinity TRI-NET IHP26b roadmap — Q4 2026 target.*  
-*Invariants: R-SI-1 · φ-anchor 0x47C0 · v1.0.0 AI formats (Claude Opus 4.6)*  
+*Invariants: R-SI-1 · φ-anchor 0x47C0 · v1.0.0 AI formats (Dmitrii Vasilev (sole author))*  
 *Open-process only. No closed PDK. No foundry NDA required.*

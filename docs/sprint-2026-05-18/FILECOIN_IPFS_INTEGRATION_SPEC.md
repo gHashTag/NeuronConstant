@@ -75,7 +75,6 @@ A training bundle is a deterministic tar archive produced at the end of each Tri
 training_bundle_v0.tar
 ├── checkpoint/
 │   ├── weights.nf4          # NF4 quantized weights checkpoint
-│   ├── weights.posit16      # Posit16 format (Opus 4.6 co-authored)
 │   └── weights.gf           # GF (Generic Float) format
 ├── audit/
 │   └── r_si_1_audit.log     # R-SI-1 audit log (append-only)

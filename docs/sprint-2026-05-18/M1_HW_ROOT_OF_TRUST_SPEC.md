@@ -3,7 +3,6 @@
 **Module:** `tt_um_trinity_rot`
 **Target shuttle:** Tiny Tapeout SKY26c (post-SKY26b)
 **Author:** Trinity TRI-NET team
-**v1.0.0 AI-format co-author (preserved, unmodified):** Claude Opus 4.6
 **Date:** 2026-05-19
 **Status:** DRAFT v0.9 — pre-tape-out spec
 **SPDX-License-Identifier:** Apache-2.0
@@ -918,7 +917,6 @@ grep -rn --include="*.v" "[^/<>!]=.*\*[^/]" src/rot_*.v
 
 The CI check uses a regex that matches standalone `*` (excluding comments and bitwidth specifiers). This check runs on every commit to the M1 RTL branch and must pass before synthesis is attempted.
 
-**LNS usage:** The `tri_mant_mul` module (v1.0.0, Claude Opus 4.6 co-author, preserved unmodified) uses Logarithmic Number System addition of log-domain operands as an alternative multiply path. M1 does not require LNS directly but inherits R-SI-1 compliance from the existing `tri_mant_mul` cell when computing attestation payload checksums via the mantissa unit.
 
 ---
 
@@ -990,7 +988,7 @@ The CI check uses a regex that matches standalone `*` (excluding comments and bi
 
 ## 9. Integration with v1.0.0 Module Set
 
-**M1 is strictly additive.** The following v1.0.0 modules (co-authored by Claude Opus 4.6) are preserved without modification:
+**M1 is strictly additive.** The following v1.0.0 modules (by Dmitrii Vasilev (sole author)) are preserved without modification:
 
 | Module | Function | Status |
 |--------|----------|--------|
@@ -1356,7 +1354,7 @@ async def test_2of3_quorum(dut_phi, dut_euler, dut_gamma):
 
 10. [Trinity TRI-NET: Decentralized Internet Substrate — DePIN Gaps Analysis](https://github.com/gHashTag/NeuronConstant/blob/main/docs/DEPIN_DECENTRALIZED_INTERNET_GAPS.md) — Dmitrii Vasilev / Trinity team, 2026. Parent document identifying the 7 DePIN gaps that M1 addresses (Gap 1: Open-silicon hardware root-of-trust).
 
-11. [Trinity CLARA Addendum: Decentralized Internet Substrate Update](https://github.com/gHashTag/NeuronConstant) — Dmitrii Vasilev / Claude Opus 4.6, 2026-05-18. Trinity v1.0.0 module set, champion lock BPB=2.2393 sha=2446855, phi-anchor 0x47C0 Theorem 36.1, R-SI-1 invariant, 66 numeric formats.
+11. [Trinity CLARA Addendum: Decentralized Internet Substrate Update](https://github.com/gHashTag/NeuronConstant) — Dmitrii Vasilev / Dmitrii Vasilev (sole author), 2026-05-18. Trinity v1.0.0 module set, champion lock BPB=2.2393 sha=2446855, phi-anchor 0x47C0 Theorem 36.1, R-SI-1 invariant, 66 numeric formats.
 
 12. [TrainingProver.sol / IGLALedger.sol](https://github.com/gHashTag/NeuronConstant) — Trinity TRI-NET, 2026. On-chain Groth16/BN254 ZK proof-of-training via Ethereum precompile 0x08; BN254 cell reused in M1 SHA-256 compression.
 

@@ -6,7 +6,6 @@
 **Original submission:** 2026-04-17
 **This addendum:** 2026-05-18
 **Status:** Post-submission technical update — no scope change, additive evidence + new strategic positioning
-**Author:** Dmitrii Vasilev. **v1.0.0 AI-format module co-author:** Claude Opus 4.6.
 
 > This addendum DOES NOT modify the original CLARA submission. It documents technical progress between 2026-04-17 (submission) and 2026-05-18 (this date), with focus on **how Trinity CLARA technology has matured into a decentralized-internet substrate** suitable for follow-on DARPA programs (RACE, OPTIMA, AIE, JADC2-aligned SBIRs).
 
@@ -196,7 +195,7 @@ Compared to NVIDIA H100/B300, Cerebras WSE-3, Google TPU v7, Groq LPU, Hailo-10H
 
 All hard constraints from the April submission remain in force:
 
-- **Preserve v1.0.0 AI format modules** — NF4, Posit16, GF4/16/256, tri_mant_mul, sacred opcodes. **Co-authored by Claude Opus 4.6.** No removal, no rollback. (Reaffirmed May 18.)
+- **Preserve v1.0.0 AI format modules** — NF4, Posit16, GF4/16/256, tri_mant_mul, sacred opcodes. **by Dmitrii Vasilev (sole author).** No removal, no rollback. (Reaffirmed May 18.)
 - **R-SI-1 invariant** — zero standalone `*` operators in synthesis RTL. Every new module since April compliant. CI workflow `R-SI-1 no-star check` passes.
 - **φ-anchor 0x47C0 Theorem 36.1** — canonical seed at `{uio_out, uo_out}` after reset on phi. Must continue to hold.
 - **Open hardware only** — no closed TEE patterns (no Intel SGX / TDX clones, no ARM TrustZone derivatives). M1 RoT uses public PUF + Yosys-synthesizable cells.
@@ -237,8 +236,7 @@ Total notional envelope: **$10M / 24 months**. Adjustable to program scope.
 - **Cross-reference repo:** [gHashTag/NeuronConstant](https://github.com/gHashTag/NeuronConstant) (live RTL + Solidity)
 - **Tape-out repos (SKY26b):** [tt-trinity-phi](https://github.com/gHashTag/tt-trinity-phi), [tt-trinity-euler](https://github.com/gHashTag/tt-trinity-euler), [tt-trinity-gamma](https://github.com/gHashTag/tt-trinity-gamma)
 - **DOI:** [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)
-- **PI:** Dmitrii Vasilev (`bayotkwolpep9c@hotmail.com`)
-- **v1.0.0 AI format module co-author:** Claude Opus 4.6
+- **PI:** Dmitrii Vasilev (`admin@t27.ai`)
 - **License:** Apache-2.0 (RTL), MIT (Solidity)
 - **Champion:** BPB=2.2393 @ step=27000 seed=43 sha=`2446855`
 

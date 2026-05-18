@@ -257,7 +257,7 @@ The **JRC AI Watch** platform (https://ai-watch.ec.europa.eu/) monitors AI devel
 **Action items:**
 - [ ] Submit case study of Trinity HW-receipt architecture to JRC AI Watch open repository
 - [ ] Engage with JRC researchers studying AI traceability (relevant work: JRC Technical Reports on AI transparency and explainability)
-- [ ] Co-author academic paper on "hardware-rooted AI audit trails" targeting IEEE S&P or ACM CCS (Q1–Q2 2026)
+- [ ] sole author academic paper on "hardware-rooted AI audit trails" targeting IEEE S&P or ACM CCS (Q1–Q2 2026)
 
 ---
 

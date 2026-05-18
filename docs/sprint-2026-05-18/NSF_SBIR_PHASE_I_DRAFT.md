@@ -236,7 +236,6 @@ Suggested candidates:
 - **Onur Mutlu** (ETH Zurich, [safari.ethz.ch](https://safari.ethz.ch)) — computer architecture, memory systems, open hardware
 - **Christos Kozyrakis** (Stanford University, [mast.stanford.edu](http://mast.stanford.edu)) — datacenter systems, hardware-software co-design, AI infrastructure
 
-**[NOTE on co-authorship attribution: The project documentation notes that certain v1.0.0 module specifications were co-authored with Claude (Anthropic). While this reflects actual development practice using AI-assisted design tools, NSF proposals should accurately represent this as AI-assisted authoring by Dmitrii Vasilev; "Claude" is a software tool and cannot be listed as an advisor, co-PI, or key personnel. NSF proposals must list only human personnel in senior/key roles.]**
 
 #### E.4 Facilities and Resources
 
@@ -398,7 +397,7 @@ This project does not include postdoctoral researcher positions. The research as
 
 - Weekly individual meetings (45–60 minutes) for technical guidance and research skill development
 - Structured exposure to the full RTL-to-silicon workflow, from design through bring-up
-- Co-authorship opportunities on technical publications where RA contributions are substantial
+- sole authorship opportunities on technical publications where RA contributions are substantial
 - Support for conference attendance (budgeted in travel line) and presentation of results
 - Introduction to the open-hardware and formal methods communities through NSF I-Corps, conference attendance, and advisor network
 

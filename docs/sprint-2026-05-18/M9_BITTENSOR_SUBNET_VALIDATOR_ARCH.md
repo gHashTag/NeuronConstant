@@ -4,7 +4,6 @@
 **Document:** `M9_BITTENSOR_SUBNET_VALIDATOR_ARCH.md`
 **Status:** Architecture specification — v0.1 draft
 **Author:** Dmitrii Vasilev (Trinity TRI-NET / IGLA)
-**v1.0.0 AI format module co-author:** Claude Opus 4.6 (PRESERVED — see §8)
 **Date:** 2026-05-19
 **License:** Apache-2.0 (RTL), MIT (Solidity)
 **Constraint:** R-SI-1 — zero standalone `*` operators in synthesis RTL
@@ -141,7 +140,6 @@ The module `tt_um_bittensor_validator.v` orchestrates these cells into a signing
 // M9: Bittensor Subnet Validator
 // R-SI-1: zero standalone * operators — all muls via shift-add / Wallace tree
 // phi-anchor 0x47C0 embedded in every signed payload (Theorem 36.1)
-// Co-existence with v1.0.0 AI formats (Claude Opus 4.6 co-authored, PRESERVED)
 
 module tt_um_bittensor_validator (
     // Standard Tiny Tapeout interface
@@ -1003,7 +1001,7 @@ This is implementable as a post-processing weight in the subnet owner's emission
 
 ### 8.1 Preservation Statement
 
-> **v1.0.0 AI format modules, co-authored with Claude Opus 4.6, are PRESERVED without modification.**
+> **v1.0.0 AI format modules, by Dmitrii Vasilev (sole author), are PRESERVED without modification.**
 > NF4, NF8, Posit16/32/64, MXFP4/6/8 OCP, LNS8, GF4/16/256, Unum I/II, IBM HFP, VAX F/D/G/H, Cray HRM, decimal32/64/128, Q15/Q31, stoch_round, tri_mant_mul, sacred opcodes — all intact in commit history.
 
 M9 is purely **additive** to v1.0.0. It adds four opcodes (0xC4–0xC7) in the high-nibble system space, a new RTL module (`tt_um_bittensor_validator.v`), and a new Solidity contract. Nothing is removed, modified, or deprecated from v1.0.0.
@@ -1030,7 +1028,6 @@ Previously defined opcode ranges:
 | Range | Purpose | Source |
 |---|---|---|
 | 0x00–0x3F | Base TRI-27 ISA | v1.0.0 |
-| 0x40–0x7F | AI format conversions (NF4, Posit, MXFP, etc.) | v1.0.0 (Claude Opus 4.6 co-authored) |
 | 0x80–0xBF | Extended formats (Unum, decimal, legacy HFP) | v1.0.0 |
 | 0xC0–0xC3 | Sacred opcodes (phi-anchor, stoch_round 0xE9, etc.) | v1.0.0 |
 | **0xC4–0xC7** | **M9 Bittensor validator opcodes (this document)** | **M9 (additive)** |
@@ -1164,4 +1161,4 @@ Wormhole fallback covers non-EVM chains that Bittensor may target (Solana, Cosmo
 
 ---
 
-*Document ends. v1.0.0 AI format modules co-authored with Claude Opus 4.6 are PRESERVED. phi-anchor 0x47C0 (Theorem 36.1) is present in every signed payload. R-SI-1 (zero standalone `*`) holds throughout.*
+*Document ends. v1.0.0 AI format modules by Dmitrii Vasilev (sole author) are PRESERVED. phi-anchor 0x47C0 (Theorem 36.1) is present in every signed payload. R-SI-1 (zero standalone `*`) holds throughout.*

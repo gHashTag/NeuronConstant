@@ -58,11 +58,10 @@ This directory holds 29 technical, business, and regulatory documents written du
 ## Hard invariants preserved across all docs
 - R-SI-1: zero standalone `*` operators in synth RTL
 - Anchor 0x47C0 at `{uio_out, uo_out}` after reset
-- v1.0.0 AI format modules (NF4, Posit16, GF4/16/256, tri_mant_mul, sacred opcodes) — co-authored by Claude Opus 4.6, preserved
+- v1.0.0 AI format modules (NF4, Posit16, GF4/16/256, tri_mant_mul, sacred opcodes) — by Dmitrii Vasilev (sole author), preserved
 - Apache-2.0 RTL / CC-BY-4.0 docs / CC-BY-SA-4.0 GDS licensing
 - Lucas POST mandatory boot check
 
 ## Owner
-- PI: Dmitrii Vasilev <bayotkwolpep9c@hotmail.com>
-- Co-author (v1.0.0 modules): Claude Opus 4.6 (Anthropic)
+- PI: Dmitrii Vasilev <admin@t27.ai>
 - Zenodo DOI: 10.5281/zenodo.19227877

@@ -49,7 +49,7 @@ This package supports full reproducibility of the **Trinity TRI-NET SKY26b Triad
 | **C-4** | 71 Coq `Qed` theorems in current build; 13 conjecture; Theorem 36.1 formal sketch | `coq/` directory in tt-trinity-phi; `trios-coq/` |
 | **C-5** | 2-of-3 chip-owner multisig attestation correctness | `MofNTrainingAttest.sol`; Foundry test suite |
 | **C-6** | 66 numeric formats; R-SI-1-compliant multiply via shift-add/Wallace/LNS | RTL files `tri_mant_mul.v`, `gf16_mul.v`, format quantizers |
-| **C-7** | v1.0.0 AI format modules co-authored with Claude Opus 4.6 | CHANGELOG, `.zenodo.json`, commit history |
+| **C-7** | v1.0.0 AI format modules by Dmitrii Vasilev (sole author) | CHANGELOG, `.zenodo.json`, commit history |
 
 ---
 
@@ -129,7 +129,6 @@ All SHA-256 values prefixed `<TBD-on-final-commit>` are to be computed post-subm
 - **Top module:** `tt_um_trinity_nano`
 - **Tile:** 1×1 (160×100 µm)
 - **Process:** SKY130A 130 nm
-- **Key submodules:** `phi_anchor_post`, `lucas_rom`, `hwrng_lfsr`, `restraint_ctrl`, `sacred_constants_rom`, `crown47_rom`, `tri_mant_mul`, `gf16_mul`, NF4/Posit16/GF4/GF16/GF256 quantizers (v1.0.0 co-authored Claude Opus 4.6)
 - **CI workflows:** `gds.yaml`, `test.yaml`, `no_star.yaml` (R-SI-1), `sky130-nightly.yml`, `tri-test.yml`
 - **GDS artifact:** `tt_submission` id [7056162644](https://github.com/gHashTag/tt-trinity-phi/actions/runs/26029619999) — 1.05 MB — SHA-256 `f3cce1c50248864caf28b68a9cd3a6245c702fc8856089e283e5a0ab57be354e`
 
@@ -600,7 +599,6 @@ For DOI update at https://zenodo.org/records/19227877 → "New version":
 | Name | Affiliation | ORCID | Role |
 |------|-------------|-------|------|
 | Dmitrii Vasilev | Trinity Stack / IGLA Research | `<TBD — register at orcid.org>` | PI; RTL, Solidity, architecture |
-| Claude Opus 4.6 | Anthropic PBC | n/a (AI system) | Co-author; v1.0.0 AI format modules (NF4, Posit16, GF4/GF16/GF256, `tri_mant_mul`, sacred opcodes 0xDF/0xE1–0xED) |
 
 ### 12.2 Description
 

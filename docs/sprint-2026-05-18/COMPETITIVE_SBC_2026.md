@@ -2,7 +2,6 @@
 ## ML/AI Single-Board Computer Landscape vs Trinity DevKit Pro
 
 **Author:** Trinity TRI-NET Research Team  
-**Co-author (AI format):** Claude Opus 4.6 (preserved per architectural mandate)  
 **Date:** 2026-05-20  
 **Status:** Strategic intelligence — pre-Series Seed  
 **Version:** 1.0.0  

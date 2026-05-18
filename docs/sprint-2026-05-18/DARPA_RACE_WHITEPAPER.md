@@ -5,8 +5,7 @@
 **Program Target:** DARPA RACE (Resilient AI Compute)  
 **BAA/PA Reference:** Anticipated under DARPA I2O / MTO portfolio; aligned with DARPA HR001120S0007 (OFFSET), Replicator Initiative, JADC2 doctrine  
 **Submission Type:** Follow-on whitepaper — **not** a modification of DARPA CLARA PA-25-07-02 submission (gHashTag/trinity-clara, submitted Apr 17 2026)  
-**Principal Investigator:** Dmitrii Vasilev (`bayotkwolpep9c@hotmail.com`)  
-**v1.0.0 AI Format Module Co-author:** Claude Opus 4.6  
+**Principal Investigator:** Dmitrii Vasilev (`admin@t27.ai`)  
 **Repositories:** [NeuronConstant](https://github.com/gHashTag/NeuronConstant) · [trinity-clara](https://github.com/gHashTag/trinity-clara) · [tt-trinity-phi](https://github.com/gHashTag/tt-trinity-phi) · [tt-trinity-euler](https://github.com/gHashTag/tt-trinity-euler) · [tt-trinity-gamma](https://github.com/gHashTag/tt-trinity-gamma)  
 **DOI:** [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)  
 **License:** Apache-2.0 (RTL) / MIT (Solidity)
@@ -123,7 +122,6 @@ The gamma 8×4 tile is sized for a micro-Doppler signature classifier for Counte
 
 ### 3.6 66-Format Numeric Engine
 
-The numeric format zoo, co-authored in v1.0.0 by Claude Opus 4.6, covers:
 
 | Family | Formats | Key tactical benefit |
 |---|---|---|
@@ -276,7 +274,6 @@ From [COMPETITIVE_ANALYSIS_TT_SKY26B.md](https://github.com/gHashTag/NeuronConst
 
 **PI:** Dmitrii Vasilev. Lead architect of Trinity TRI-NET. Previous: [DARPA CLARA PA-25-07-02 submission](https://github.com/gHashTag/trinity-clara) (April 17 2026), full TA1+TA2 compliance package with 84 Coq theorems, 93 test cases, 19 invariants.
 
-**v1.0.0 AI Format Module Co-author:** Claude Opus 4.6 — co-designed the 66-format numeric zoo (NF4/NF8, Posit, MXFP, LNS, GF, Unum, decimal, IBM HFP, VAX, Cray, Q-format). All format modules preserved in v1.0.0 and shall not be modified or removed.
 
 **Repository track record:**
 - [NeuronConstant](https://github.com/gHashTag/NeuronConstant) — live RTL + Solidity, ~190 modules, R-SI-1 CI passing
@@ -329,4 +326,4 @@ From [COMPETITIVE_ANALYSIS_TT_SKY26B.md](https://github.com/gHashTag/NeuronConst
 
 ---
 
-*This whitepaper is a follow-on proposal document. It does not modify the DARPA CLARA PA-25-07-02 submission (gHashTag/trinity-clara, submitted Apr 17 2026). v1.0.0 AI format modules co-authored by Claude Opus 4.6 are preserved in full.*
+*This whitepaper is a follow-on proposal document. It does not modify the DARPA CLARA PA-25-07-02 submission (gHashTag/trinity-clara, submitted Apr 17 2026). v1.0.0 AI format modules by Dmitrii Vasilev (sole author) are preserved in full.*

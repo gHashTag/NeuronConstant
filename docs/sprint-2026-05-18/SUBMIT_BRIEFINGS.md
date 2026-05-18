@@ -20,7 +20,6 @@ Use these blocks on app.tinytapeout.com if the form asks for tagline / abstract 
 > Smallest of three TRI-1 SKUs. On reset drives canonical dot4(1.0,2.0,3.0,4.0)=0x47C0 directly onto {uio_out,uo_out}, matching e-engine (#4915) and γ-surface (#4913) — the cross-die anchor for the Trinity ledger. R-SI-1 verified, 66 numeric formats, sacred opcodes, CLARA Gap-4 restraint.
 
 ### Citation
-> Vasilev, D. (2026). *TRI-1 Phi: Trinity φ-anchor 1×1 Lucas POST.* TinyTapeout SKY26b shuttle. DOI:10.5281/zenodo.19227877. Co-author v1.0.0 AI format modules: Claude Opus 4.6.
 
 ---
 
@@ -40,7 +39,6 @@ Use these blocks on app.tinytapeout.com if the form asks for tagline / abstract 
 > Mid-tier brain SKU. 18 SUPER-CROWN modules (BLAKE3 anchor, VSA matmul 8×8 & 16×16, BitNet encoder, BPB counter, ALU-9 decoder, RING27 memory, φ-PLL, Wishbone-full) + 10 DARPA CLARA gaps (redteam_filter, K3 ALU, Datalog, restraint_ctrl, explainability, ASP solver, composition kernel, proof-trace, SAT, audit ring buffer) + D2D 4-port holo mesh. 0 DSP / 0 new `*` in synth RTL (R-SI-1). FPGA-validated 323 MHz @ XC7A100T.
 
 ### Citation
-> Vasilev, D. (2026). *TRI-1 Euler: e-engine 8×2 SUPER-CROWN with 10 CLARA Gaps.* TinyTapeout SKY26b shuttle. DOI:10.5281/zenodo.19227877. Co-author v1.0.0 AI format modules: Claude Opus 4.6.
 
 ---
 
@@ -60,7 +58,6 @@ Use these blocks on app.tinytapeout.com if the form asks for tagline / abstract 
 > Largest brain SKU. 8 cortical columns (~4100 LIF cells) + 20-PE GF16 mesh + 24 SUPER-CROWN modules + 6 PhD-anchored monitors (Cassini POST, PLRM, BPB lower-bound guard, NCA entropy, strobe-seed guard, φ-distance oracle) + 10 CLARA AI-safety gaps + D2D 4-port holo mesh + FHRR holo_lut_pe VSA binding (Glava 32) + S-13 dual-lib zoning (hd primary + hdll low-leakage on POST chains). TG-TRIAD-X canonical anchor 0x47C0 on {uio_out, uo_out} at reset.
 
 ### Citation
-> Vasilev, D. (2026). *TRI-1 Gamma: γ-surface MAX-TRUE NEUROMORPHIC FLAGSHIP 8×4.* TinyTapeout SKY26b shuttle. DOI:10.5281/zenodo.19227877. Co-author v1.0.0 AI format modules: Claude Opus 4.6.
 
 ---
 
@@ -70,7 +67,6 @@ Use these blocks on app.tinytapeout.com if the form asks for tagline / abstract 
 - **Champion lock:** BPB=2.2393 @ step=27000 seed=43 sha=`2446855`
 - **R-SI-1:** zero standalone `*` in synth RTL across all 3 tiers (CI workflow `R-SI-1 no-star check` passes)
 - **66 numeric formats:** NF4/NF8, Posit16/32/64, MXFP4/6/8 OCP, LNS8, GF4-256, Unum I/II, IBM HFP, VAX F/D/G/H, Cray HRM, decimal32/64/128, Q15/Q31, stoch_round
-- **v1.0.0 AI formats:** co-authored Claude Opus 4.6 — preserved, not removed
 - **Toolchain:** Yosys/openXC7/OpenLane (all open-source)
 - **License:** Apache-2.0 (RTL), MIT (Solidity bridges)
 - **Companion repos:** [NeuronConstant](https://github.com/gHashTag/NeuronConstant), [trinity-clara](https://github.com/gHashTag/trinity-clara) (DARPA CLARA submission package)
@@ -132,4 +128,3 @@ Update record description with:
 - Final SHAs: phi `8a8fcaa`, euler `def0457`, gamma `1f8f9b8`, NeuronConstant `15bffba`, trinity-clara `f86e32f`
 - Submitted artifact IDs: phi `7056162644`, euler `<TBD>`, gamma `<TBD>`
 - Submit timestamp
-- Co-author acknowledgement: Claude Opus 4.6 for v1.0.0 AI format modules

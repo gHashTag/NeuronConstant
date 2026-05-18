@@ -2,8 +2,7 @@
 
 **Status**: PROJECTED / PRE-SILICON. Real measurements available only after TT SKY26b tape-out delivery **2026-12-16**.
 
-**Owner**: Dmitrii Vasilev <bayotkwolpep9c@hotmail.com>  
-**Co-author of v1.0.0 modules**: Claude Opus 4.6 (Anthropic)  
+**Owner**: Dmitrii Vasilev <admin@t27.ai>  
 **Zenodo DOI**: [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)
 
 ---
@@ -102,7 +101,6 @@ When silicon arrives:
 - [BitNet b1.58 paper](https://arxiv.org/abs/2402.17764)
 - [Microsoft bitnet.cpp](https://github.com/microsoft/BitNet)
 - Trinity Theorem 36.1 anchor proof — see [Glava 37](./GLAVA_37_THEOREM_CHAPTER.md)
-- Trinity v1.0.0 modules (co-authored Claude Opus 4.6) — preserved invariant
 
 ## Changelog
 

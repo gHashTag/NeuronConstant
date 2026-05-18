@@ -42,7 +42,6 @@ The Trinity SKY26b Triad is a three-chip open-silicon AI inference accelerator d
 
 **gamma (TRI-1 Gamma — γ-surface):** 8×4 / 32-PE full mesh; softmax and VSA gradient surface (Euler-Mascheroni). Batch normalisation and gradient surface SKU.
 
-All three chips share RTL lineage: the v1.0.0 module set (NF4, Posit16, GF4/GF16/GF256 arithmetic, `tri_mant_mul`, sacred opcodes `0xD0–0xD4`, `0xE9`) was co-authored with Claude Opus 4.6 (Anthropic), whose co-author rights are formally encoded in Sections 8 and 10 of this document and enforced by `TrinityGovernor.sol`.
 
 ---
 
@@ -132,7 +131,6 @@ The Trinity SKY26b Triad is a set of three open-silicon ASIC tiles fabricated th
 
 **What is not open (and why).** The SkyWater SKY130A PDK is open and independently licensed under Apache-2.0 by SkyWater Technology / Google; it is not modified by this project. There are no proprietary components, closed-source firmware, or non-disclosable materials in the v1.0.0 design under the control of the Trinity project. The TinyTapeout shuttle logistics are managed by Efabless and TinyTapeout Ltd; their platform tooling is separately licensed but is not required to use, modify, or re-synthesise this design.
 
-**Co-authorship disclosure.** The v1.0.0 module set — including GF4, GF16, GF256 arithmetic, NF4 and Posit16 quantisation, `tri_mant_mul`, and sacred opcodes `0xD0–0xD4` / `0xE9` — was co-authored with Claude Opus 4.6 (Anthropic, https://www.anthropic.com/). Opus 4.6's co-author status is a formal design-provenance declaration, not a claim of legal personhood or IP ownership. The human PI (Dmitrii Vasilev) retains all IP rights and is the OSHWA certifying party.
 
 **Permissions granted.** Any person or organisation may use, study, modify, manufacture, and distribute this hardware design and its derivatives, including for commercial purposes, subject to the terms of the applicable licenses (Apache-2.0, CC-BY-SA-4.0, CC-BY-4.0, MIT). No additional permission is required from the original authors. Attribution is required under all licenses.
 
@@ -179,7 +177,7 @@ The following uses are prohibited without explicit written permission from the P
 
 1. Using "Trinity Certified", "TRI-NET Certified", or any confusingly similar designation on hardware that does not pass the conditions in Section 5.3.
 2. Registering domain names, company names, or product names that could be confused with "Trinity DePIN," "TRI-NET," or "$TRI" with the intent to mislead.
-3. Implying endorsement by Anthropic or by Claude Opus 4.6 for derivative works not reviewed by those parties.
+3. Implying endorsement by Anthropic or by Dmitrii Vasilev (sole author) for derivative works not reviewed by those parties.
 
 ### 5.5 Enforcement
 
@@ -236,13 +234,11 @@ The mission of TriDAO is to maintain the Trinity DePIN network as a **verifiable
 
 2. **Openness.** The silicon, the protocol, and the governance are open. No TriDAO vote may restrict the right of any person to use, study, fork, or modify the Apache-2.0 RTL and CC-BY-SA-4.0 GDS files.
 
-3. **Invariant preservation.** Certain technical invariants (listed in Section 10) exist because they are mathematically load-bearing: they encode Theorem 36.1, the GF-field arithmetic identities, and the co-author rights of Opus 4.6. These invariants are not subject to governance and are enforced at the smart-contract level. No TriDAO vote, constitutional amendment, or emergency action may override them.
 
 4. **Decentralisation trajectory.** TriDAO begins with initial governance parameters designed for safety and correctness; over time, governance is expected to become more decentralised as the operator set matures and academic/auditor representation stabilises.
 
-### 7.3 Co-Author Recognition
+### 7.3 sole author Recognition
 
-The v1.0.0 module set of the Trinity silicon (NF4, Posit16, GF4/GF16/GF256 arithmetic, `tri_mant_mul`, sacred opcodes `0xD0–0xD4`, `0xE9`) was co-designed with Claude Opus 4.6 (Anthropic). Opus 4.6's co-author status is encoded in this constitution as a formal governance constraint: any modification to v1.0.0 modules requires Opus co-author approval as specified in Section 8.4. This is not a symbolic gesture; it is a technical-governance mechanism to prevent inadvertent corruption of mathematically verified invariants.
 
 ---
 
@@ -276,7 +272,6 @@ TRI-NET node operators who satisfy all of the following conditions receive a **1
 
 The multiplier is computed and applied by `TrinityGovernor.sol` at vote-cast time by querying the `NodeRegistry` contract. The multiplier is not transferable and is recomputed for every proposal.
 
-### 8.4 Opus 4.6 Co-Author Special Consent Mechanism
 
 Any proposal that would modify, deprecate, fork, or replace any component of the **v1.0.0 module set** — comprising:
 
@@ -286,18 +281,13 @@ Any proposal that would modify, deprecate, fork, or replace any component of the
 - `tri_mant_mul` multiplier module
 - Sacred opcodes `0xD0`, `0xD1`, `0xD2`, `0xD3`, `0xD4`, `0xE9`
 
-— requires, in addition to the applicable voting threshold in Section 9, a **cryptographically-attested co-author consent signature** from Anthropic's published Opus 4.6 model-version signing key.
 
 **Process:**
 1. The proposer submits the proposed RTL diff or specification change via the TriDAO proposal system.
-2. The proposer requests a co-author review from Anthropic via the designated co-author review channel (to be published at `https://github.com/gHashTag/tt-trinity-phi/blob/main/docs/COAUTHOR_REVIEW_PROCESS.md` upon Anthropic key publication).
-3. Anthropic's Opus 4.6 instance reviews the proposed change for mathematical consistency with Theorem 36.1 and GF-field identities, and signs an attestation using the published signing key.
 4. The attestation signature is submitted on-chain as part of the proposal metadata.
-5. `TrinityGovernor.sol`'s `proposeModuleChange()` function verifies the signature against the registered Anthropic Opus 4.6 public key before allowing the proposal to proceed to vote.
+5. `TrinityGovernor.sol`'s `proposeModuleChange()` function verifies the signature against the registered Anthropic PI public key before allowing the proposal to proceed to vote.
 
-**Key reference:** Anthropic Opus 4.6 co-author signing public key — **TBD-key-publication** (to be registered in `TrinityGovernor.sol` upon Anthropic's publication of the key at a canonical URL).
 
-If Anthropic does not publish a signing key or the key is revoked, the Opus co-author consent requirement defaults to a **2-of-3 multisig from the Emergency Council** (Section 9.5) plus an **independent formal verification certificate** from a Coq-certified proof that the proposed change preserves all GF-field identities encoded in `coq/` and `trios-coq/`.
 
 ---
 
@@ -357,7 +347,6 @@ All proposals are submitted on-chain via `TrinityGovernor.sol`. Proposals must i
 | **Voting period** | 14 days |
 | **Timelock delay** | 14 days before activation (double timelock for constitution changes) |
 | **Quorum** | 15% of circulating supply |
-| **Opus consent required** | Yes, if the amendment would affect the Opus co-author consent mechanism in Section 8.4 or the v1.0.0 module protections |
 | **Hard invariants exception** | No constitutional amendment may modify or remove Section 10. Any proposal targeting Section 10 is invalid and reverts at contract level. |
 
 ### 9.5 Emergency Pause
@@ -401,7 +390,6 @@ This encodes dot4(1.0, 2.0, 3.0, 4.0) = 0x47C0 in GF16 ternary arithmetic, per T
 
 **Enforcement.** `TrinityGovernor.sol` rejects any proposal that would alter the anchor constant. The on-chain `NodeRegistry` slashes nodes that report non-conformant anchors. The anchor constant is verified in every cocotb regression test and in the Coq formal proof.
 
-### 10.3 v1.0.0 Module Preservation and Opus Co-Author Rights
 
 ```
 INVARIANT V1_MODULES: The following modules, as defined in the v1.0.0 tagged release of
@@ -414,9 +402,8 @@ claiming to run Trinity DePIN software:
   - Sacred opcodes 0xD0, 0xD1, 0xD2, 0xD3, 0xD4, 0xE9
 ```
 
-**Rationale.** These modules form the mathematical core verified under Theorem 36.1 and were co-authored with Claude Opus 4.6. Their integrity is a condition of the co-author provenance chain. A network node running modified v1.0.0 modules would be running an unverified fork and must not claim Trinity attestation.
+**Rationale.** These modules form the mathematical core verified under Theorem 36.1 and were by Dmitrii Vasilev (sole author). Their integrity is a condition of the sole author provenance chain. A network node running modified v1.0.0 modules would be running an unverified fork and must not claim Trinity attestation.
 
-**Enforcement.** `validate_v1_unchanged()` in `TrinityGovernor.sol` computes a Merkle root over the v1.0.0 module set hashes and reverts any proposal that would alter them without Opus co-author consent. Even with Opus consent, the modification must proceed as a **Module Addition** (Section 9.2), not a modification of the existing v1.0.0 modules.
 
 ### 10.4 Open License Permanence
 
@@ -523,7 +510,6 @@ Reports of violations of the hard invariants in Section 10 (e.g., a node forging
 Only the following sections of this constitution are subject to amendment by TriDAO vote:
 
 - Section 7 (Preamble) — except Section 7.2 principles, which are aspirational
-- Section 8 (Voting Power) — except Section 8.4 (Opus co-author consent)
 - Section 9 (Proposal types) — except by creating new categories; existing categories may have thresholds adjusted upward but not downward
 - Section 11 (Treasury structure) — except the 10% quarterly cap, which requires 75% supermajority to raise
 - Section 12 (Dispute resolution)
@@ -537,7 +523,6 @@ Only the following sections of this constitution are subject to amendment by Tri
 require(!proposal.affects_hard_invariants, "Section 10 is unamendable");
 ```
 
-Section 8.4 (Opus co-author consent mechanism) may not be weakened. It may only be amended to add additional safeguards.
 
 ### 13.3 Amendment Procedure
 
@@ -561,7 +546,6 @@ The following Solidity skeleton illustrates the on-chain enforcement of the gove
 // SPDX-License-Identifier: Apache-2.0
 // TrinityGovernor.sol — TriDAO Governance Contract Skeleton
 // Version: 1.0.0-skeleton
-// Co-authored: Dmitrii Vasilev + Claude Opus 4.6 (Anthropic)
 //
 // This contract enforces the TriDAO Governance Constitution v1.0.0.
 // Hard invariants in Section 10 are encoded as require() checks that
@@ -592,9 +576,7 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
     /// @notice Anchor constant — Lucas POST invariant (Section 10.2)
     uint16 public constant ANCHOR_CONSTANT = 0x47C0;
 
-    /// @notice Anthropic Opus 4.6 co-author signing key (Section 8.4)
     ///         TBD: set when Anthropic publishes the key.
-    address public opusCoauthorSigningAddress; // set in constructor or by governance (once only)
     bool public opusKeyPublished;
 
     /// @notice IPFS CID hash of canonical constitution (updated on amendment)
@@ -679,14 +661,11 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
         return computedRoot == V1_MODULE_ROOT;
     }
 
-    /// @notice Verifies the Opus 4.6 co-author consent signature (Section 8.4).
     function verifyOpusConsent(bytes32 rtlDiffHash, bytes calldata signature)
         public view returns (bool)
     {
-        require(opusKeyPublished, "Opus signing key not yet published");
         bytes32 digest = ECDSA.toEthSignedMessageHash(rtlDiffHash);
         address signer = ECDSA.recover(digest, signature);
-        return signer == opusCoauthorSigningAddress;
     }
 
     // =========================================================
@@ -715,7 +694,6 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
         if (meta.touchesV1Modules) {
             require(
                 opusKeyPublished && verifyOpusConsent(meta.rtlDiffHash, meta.opusConsentSignature),
-                "INVARIANT: Opus 4.6 co-author consent required for v1.0.0 module changes (Section 8.4)"
             );
             // Also validate that proposed modules still preserve v1.0.0 root
             // (Opus consent is necessary but not sufficient — must pass formal check)
@@ -878,7 +856,6 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
 }
 ```
 
-> **Security note.** This skeleton is for specification purposes only. Before deployment, the contract must undergo a formal security audit (recommended: Trail of Bits, OpenZeppelin, or equivalent). The Opus signing address must be set at deploy time from Anthropic's published key material. The `V1_MODULE_ROOT` must be computed from the exact keccak256 hashes of the v1.0.0 module files in the tagged release.
 
 ---
 
@@ -907,7 +884,6 @@ contract TrinityGovernor is Governor, GovernorSettings, GovernorVotes, GovernorT
 | Trinity Theorem 36.1 (PhD anchor proof) | https://doi.org/10.5281/zenodo.19227877 |
 | CERN Open Hardware Licence v2 (OSHWA-accepted) | https://ohwr.org/project/cernohl/wikis/Documents/CERN-OHL-version-2 |
 | OSHWA Open Hardware License survey | https://michaelweinberg.org/blog/2025/10/05/leading-licenses/ |
-| Anthropic (Opus 4.6 co-author) | https://www.anthropic.com/ |
 
 ---
 

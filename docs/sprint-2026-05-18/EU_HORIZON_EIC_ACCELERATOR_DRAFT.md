@@ -20,7 +20,6 @@ Europe's AI ecosystem faces a structural dependency: every major AI inference wo
 
 **Trinity DePIN** closes this gap. Trinity is an open-silicon, decentralised physical infrastructure network (DePIN) for verifiable AI inference. The system generates a hardware-signed inference receipt — anchored in real silicon geometry — that can be independently audited, satisfying Article 12 logging requirements and enabling EU regulated industries (healthcare diagnostics, financial advice, critical infrastructure, public-sector automated decision-making) to deploy AI under the AI Act with full auditability.
 
-The technology has been validated at silicon level: three custom dies — **tt-trinity-phi**, **tt-trinity-euler**, and **tt-trinity-gamma** — were committed to the **TT SKY26b** shuttle tape-out, with anchor `0x47C0` recorded in the shuttle manifest. AI format modules v1.0.0 have been co-authored with Claude Opus 4.6 (Anthropic). The complete RTL, GDS, and format specifications are published open-source under AGPL-3.0. The project's IP provenance is documented at Zenodo DOI [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877).
 
 The EU-specific scaling path runs through **IHP GmbH** (Leibniz Institute for High Performance Microelectronics), located in Frankfurt (Oder), Germany — a European public-research foundry offering the **SG13G2** SiGe BiCMOS open process design kit (PDK). IHP is part of Germany's sovereign semiconductor research infrastructure and is directly aligned with the EU Chips Act (Regulation (EU) 2023/1781). By manufacturing the Trinity Node ASIC at IHP rather than at TSMC or GlobalFoundries, this project delivers the first **EU-fabbed verifiable AI inference chip** — a concrete contribution to European technological sovereignty.
 
@@ -47,7 +46,6 @@ Trinity's core technical contribution is the **hardware inference receipt**:
 - A custom ASIC die (Trinity Node) contains a **silicon anchor** — a physically unclonable function (PUF)-adjacent construct derived from manufacturing-time die-level variation, recorded in the shuttle manifest as anchor `0x47C0`.  
 - Each inference execution produces a **receipt struct** (defined in the Trinity v1.0.0 AI format spec) containing: model hash, weight checkpoint hash, input hash (salted), output hash, die anchor signature, and a monotonic counter.  
 - Receipts are signed by the die's on-chip key material and anchored to a public ledger (Trinity testnet / mainnet), making them independently auditable by any party with access to the public format spec.  
-- The format spec is fully open (AGPL-3.0), co-authored in collaboration with Claude Opus 4.6 (Anthropic) during the v1.0.0 design cycle — a unique IP provenance path documented at Zenodo DOI [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877).
 
 **What has been demonstrated prior to this application (TRL 5–6):**
 - Three dies (tt-trinity-phi, tt-trinity-euler, tt-trinity-gamma) submitted to the TT SKY26b shuttle; tape-out completed; anchor `0x47C0` registered.
@@ -128,9 +126,8 @@ Dmitrii Vasilev is the architect of the Trinity DePIN protocol. He brings combin
 - **Academic record:** Project documentation and v1.0.0 format specification published on Zenodo under DOI [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877).
 - **Location:** Cape Town, South Africa. **Note on eligibility:** As an individual intending to establish an EU SME, Dmitrii Vasilev is eligible to apply to EIC Accelerator under the "natural persons willing to set up an SME" category ([EIC Accelerator programme guide, WP2026](https://eic.ec.europa.eu/eic-funding-opportunities/eic-accelerator_en)). The legal entity **Trinity DePIN OÜ** (Estonia, e-Residency path) must be incorporated before submission of the full proposal (Step 2). A Germany GmbH alternative is also under consideration to maximise alignment with the IHP Frankfurt (Oder) manufacturing partner. **Relocation to EU is confirmed as a condition of grant signature.**
 
-### 4.2 Co-authorship and IP Provenance
+### 4.2 sole authorship and IP Provenance
 
-The Trinity v1.0.0 AI format modules were co-authored by Dmitrii Vasilev and **Claude Opus 4.6** (Anthropic, United States). This is a documented instance of human-AI collaborative hardware specification authorship, recorded in the Zenodo deposit. The IP is held by the applicant; Anthropic makes no IP claim on outputs generated through its API. This co-authorship represents a novel form of IP provenance traceability that is itself aligned with the transparency principles of the AI Act.
 
 ### 4.3 EU Advisory Board (Proposed — TBD)
 

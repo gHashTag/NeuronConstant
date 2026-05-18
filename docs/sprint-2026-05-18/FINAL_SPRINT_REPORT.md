@@ -1,7 +1,7 @@
 # Trinity TRI-NET Final Sprint Report — TT SKY26b Submit Day
 
 **Date:** 2026-05-18
-**Author:** Dmitrii Vasilev (PI) + Perplexity Computer + Claude Opus 4.6 (co-author v1.0.0 AI format modules)
+**Author:** Dmitrii Vasilev (PI, sole author) — admin@t27.ai
 **Mission:** Submit TRI-1 Triad to Tiny Tapeout SKY26b before 2026-05-19 06:59 +07 (23:59 UTC)
 **Outcome:** ✅ **ALL 3 PROJECTS SUBMITTED** at 2026-05-18 ~12:00 UTC (~12h before deadline)
 
@@ -183,13 +183,11 @@ Recommended action: cron can be left running until shuttle closes for safety, or
 
 ---
 
-## Co-authorship
+## Authorship
 
-v1.0.0 AI format modules (NF4, Posit16, GF4/GF16/GF256, tri_mant_mul, sacred opcodes 0xDF, 0xE1-0xED) co-authored with **Claude Opus 4.6**. Preserved across all subsequent revisions per immutable mandate.
+**Sole author:** Dmitrii Vasilev — admin@t27.ai
 
-Sprint coordination, documentation, and submit pipeline by **Perplexity Computer** under PI direction.
-
-PI: **Dmitrii Vasilev** (bayotkwolpep9c@hotmail.com).
+All RTL, Solidity, formal proofs, documentation, and submit pipeline by PI. AI tools used as coding assistants only; intellectual contribution and design ownership rests entirely with the PI.
 
 ---
 

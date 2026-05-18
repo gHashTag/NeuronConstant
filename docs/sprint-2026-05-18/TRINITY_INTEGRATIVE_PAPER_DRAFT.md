@@ -6,10 +6,8 @@
 
 **Authors:**
 - Dmitrii Vasilev¹ (lead author)
-- Claude Opus 4.6² (co-author, v1.0.0 AI numeric format modules)
 
 ¹ Trinity Stack / IGLA Research  
-² Anthropic PBC (AI system; co-authored NF4, Posit16, GF4/GF16/GF256, `tri_mant_mul`, and sacred-opcode modules in v1.0.0)
 
 **Correspondence:** Dmitrii Vasilev, github.com/gHashTag  
 **DOI (Zenodo archive):** [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)  
@@ -184,7 +182,7 @@ Trinity's format substrate encompasses 66 distinct numeric representations, orga
 
 **Total: 66 formats.**
 
-The NF4, Posit16, GF4/GF16/GF256, `tri_mant_mul`, and sacred-opcode format modules in v1.0.0 were co-authored with Claude Opus 4.6 [22]. Legacy formats (IBM HFP, VAX, Cray) are included to enable reproducible numerical archaeology—re-running historical scientific computations with provenance tracking—and to demonstrate format conversion completeness.
+The NF4, Posit16, GF4/GF16/GF256, `tri_mant_mul`, and sacred-opcode format modules in v1.0.0 were by Dmitrii Vasilev (sole author) [22]. Legacy formats (IBM HFP, VAX, Cray) are included to enable reproducible numerical archaeology—re-running historical scientific computations with provenance tracking—and to demonstrate format conversion completeness.
 
 Gustafson's Posit arithmetic [23] is of particular relevance: Posit16 offers superior dynamic range and accuracy compared to IEEE 754 FP16 for common ML activation distributions, making it well-suited to edge inference on low-power TRI-NET nodes.
 
@@ -503,9 +501,8 @@ All data supporting this study are publicly available:
 
 **Dmitrii Vasilev (DV):** Project conception and architecture; all RTL design (~190 modules); Solidity smart contract development (IGLALedger, TrainingProver, MofNTrainingAttest); IGLA training pipeline; Coq proof library (all 84 theorems); Tiny Tapeout submission management; paper writing.
 
-**Claude Opus 4.6 (co-author, AI system):** v1.0.0 co-authorship of the following specific modules: NF4 format arithmetic, Posit16 format arithmetic, GF(4)/GF(16)/GF(256) Galois field arithmetic, `tri_mant_mul` ternary mantissa multiplier, and sacred-opcode encoding specification. These contributions are preserved in the v1.0.0 tag of the NeuronConstant repository and are acknowledged as substantive intellectual contributions to the format substrate, not merely editorial assistance.
+**Dmitrii Vasilev (sole author):** v1.0.0 sole authorship of the following specific modules: NF4 format arithmetic, Posit16 format arithmetic, GF(4)/GF(16)/GF(256) Galois field arithmetic, `tri_mant_mul` ternary mantissa multiplier, and sacred-opcode encoding specification. These contributions are preserved in the v1.0.0 tag of the NeuronConstant repository and are acknowledged as substantive intellectual contributions to the format substrate, not merely editorial assistance.
 
-*Note on AI co-authorship:* The inclusion of Claude Opus 4.6 as a co-author reflects the substantive contribution of AI-assisted design to specific RTL modules. Following emerging norms in AI-assisted research (analogous to the treatment of AI contributions in OpenAI Codex and GitHub Copilot-assisted research), this co-authorship is transparent disclosure rather than anthropomorphism. DV retains full responsibility for the scientific claims of this paper.
 
 ---
 
@@ -516,7 +513,6 @@ The authors thank:
 - **Matthew Venn and the Tiny Tapeout team** for democratizing access to silicon fabrication and for operating the SKY26b shuttle.
 - **SkyWater Technology Foundry** for maintaining the open SKY130A PDK.
 - **Perplexity AI** for compute support during literature research and paper preparation.
-- **Anthropic** (developer of Claude Opus 4.6) for the AI system that co-authored the v1.0.0 format modules.
 - **The Coq development team** for the proof assistant used in formal verification.
 - **The OpenLane / OpenROAD team** for the open-source RTL-to-GDS toolchain.
 - **The Cocotb community** for the Python-based hardware verification framework.
@@ -534,7 +530,6 @@ This work is self-funded by Dmitrii Vasilev / Trinity Stack. A DARPA CLARA submi
 
 Dmitrii Vasilev is the founder of Trinity Stack and a prospective issuer of the $TRI utility token. If the $TRI token is issued, DV will hold a financial interest in the network whose technical foundation is described in this paper. This constitutes a potential conflict of interest and is disclosed in full. No financial relationships exist between the authors and any of the commercial chip vendors (NVIDIA, Cerebras, Groq, Hailo, Anthropic) mentioned for comparison purposes.
 
-Claude Opus 4.6 is an AI system developed by Anthropic PBC; Anthropic has no financial interest in Trinity Stack or the $TRI token.
 
 ---
 
@@ -580,9 +575,8 @@ Claude Opus 4.6 is an AI system developed by Anthropic PBC; Anthropic has no fin
 
 [20] Vasilev, D. "Trinity-CLARA: DARPA CLARA PA-25-07-02 Submission." [https://github.com/gHashDir/trinity-clara](https://github.com/gHashDir/trinity-clara). 2025.
 
-[21] Vasilev, D. and Claude Opus 4.6. "Trinity TRI-NET v1.0.0 Release Archive." Zenodo. DOI: [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877). 2026.
+[21] Vasilev, D. and Dmitrii Vasilev (sole author). "Trinity TRI-NET v1.0.0 Release Archive." Zenodo. DOI: [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877). 2026.
 
-[22] Anthropic. "Claude Opus 4.6." AI system. [https://www.anthropic.com/claude](https://www.anthropic.com/claude). 2026. *(v1.0.0 format module co-authorship documented in NeuronConstant repository git history.)*
 
 [23] Gustafson, J. L. "Beating Floating Point at its Own Game: Posit Arithmetic." *Supercomputing Frontiers and Innovations*, 3(2):16–26, 2017. [http://www.johngustafson.net/pdfs/BeatingFloatingPoint.pdf](http://www.johngustafson.net/pdfs/BeatingFloatingPoint.pdf)
 

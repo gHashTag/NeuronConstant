@@ -6,8 +6,7 @@
 **BAA/PA Reference:** DARPA AIE microprograms (rotating solicitations under DARPA I2O/MTO); aligned with DoD Zero Trust Strategy 2027 mandate and EO 14110  
 **Submission Type:** Follow-on whitepaper — **not** a modification of DARPA CLARA PA-25-07-02 submission ([gHashTag/trinity-clara](https://github.com/gHashTag/trinity-clara), submitted Apr 17 2026)  
 **Focused Module:** M1 — Hardware Root-of-Trust (standalone tape-out)  
-**Principal Investigator:** Dmitrii Vasilev (`bayotkwolpep9c@hotmail.com`)  
-**v1.0.0 AI Format Module Co-author:** Claude Opus 4.6  
+**Principal Investigator:** Dmitrii Vasilev (`admin@t27.ai`)  
 **Repositories:** [NeuronConstant](https://github.com/gHashTag/NeuronConstant) · [trinity-clara](https://github.com/gHashTag/trinity-clara) · [tt-trinity-phi](https://github.com/gHashTag/tt-trinity-phi)  
 **DOI:** [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)  
 **License:** Apache-2.0 (RTL) / MIT (Solidity)
@@ -306,7 +305,6 @@ No manufacturer trust dependency. No factory programming step. Every enrollment 
 
 **PI:** Dmitrii Vasilev. Architect of Trinity TRI-NET. DARPA CLARA PA-25-07-02 full submission package ([gHashTag/trinity-clara](https://github.com/gHashTag/trinity-clara), April 17 2026) with 84 Coq theorems, 93 test cases, 19 invariants, TA1 + TA2 compliance. SKY26b phi-tier tape-out GDS artifact READY (commit `8a8fcaa`, artifact `7056162644`).
 
-**v1.0.0 AI Format Module Co-author:** Claude Opus 4.6 — co-designed all 66 format modules. The v1.0.0 modules are preserved in full and are referenced in the base system that M1 attests.
 
 **Relevant artifacts:**
 
@@ -368,4 +366,4 @@ No manufacturer trust dependency. No factory programming step. Every enrollment 
 
 ---
 
-*This whitepaper is a focused single-module AIE microprogram proposal. It does not modify the DARPA CLARA PA-25-07-02 submission (gHashTag/trinity-clara, submitted Apr 17 2026). The base system's v1.0.0 AI format modules, co-authored by Claude Opus 4.6, are preserved in full. M1 is an additive module on top of the existing Trinity base.*
+*This whitepaper is a focused single-module AIE microprogram proposal. It does not modify the DARPA CLARA PA-25-07-02 submission (gHashTag/trinity-clara, submitted Apr 17 2026). The base system's v1.0.0 AI format modules, by Dmitrii Vasilev (sole author), are preserved in full. M1 is an additive module on top of the existing Trinity base.*

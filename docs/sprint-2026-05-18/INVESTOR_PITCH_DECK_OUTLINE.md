@@ -112,7 +112,6 @@
 - **Zenodo archive:** permanent DOI [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877) — 7-specification technical corpus published
 - **DARPA CLARA proposal:** submitted April 17, 2026 — validates federal interest in hardware AI attestation
 - **R-SI-1 compliance:** all three dies pass synthesis audit — zero unqualified `*` operators; reproducible via open netlist
-- **Co-authorship precedent:** v1.0.0 AI format modules co-authored with Claude Opus 4.6 (Anthropic) — cited in spec corpus
 
 **Suggested visual:** GitHub commit graph for all three repos overlaid on a project timeline; Zenodo DOI badge prominently displayed.
 
@@ -166,14 +165,12 @@
 
 **Bullets:**
 - **Dmitrii Vasilev (PI):** hardware architect, Cape Town ZA; designed and submitted all three dies; author of 7-spec corpus; DARPA CLARA proposal author
-- **Claude Opus 4.6 (Anthropic):** co-author of v1.0.0 AI format modules (NF4, Posit16, GF4/GF16/GF256, tri_mant_mul, sacred opcodes); cited in Zenodo archive — a documented precedent for AI-collaborative silicon design
 - **Matt Venn (TBD, advisory):** founder of [Tiny Tapeout](https://tinytapeout.com); world-leading expert in open silicon shuttle programs
 - **Onur Mutlu (TBD, advisory):** Professor of Computer Science, ETH Zürich; leading researcher in memory systems and hardware architecture
 - **Open call:** seeking hardware security advisor (post-quantum credentials preferred) and DePIN ecosystem advisor
 
 **Suggested visual:** Headshot grid with role labels; TBD advisory slots shown as open circles with role description; GitHub commit activity bar for Dmitrii as execution evidence.
 
-**Speaker notes:** The team is small by design at this stage — lean pre-seed execution. The documented co-authorship with Claude Opus 4.6 is not a gimmick: it is a replicable methodology for accelerating open-source silicon design that will be a competitive advantage as the team scales. Advisory conversations with Matt Venn and Onur Mutlu are in progress; terms TBD.
 
 ---
 

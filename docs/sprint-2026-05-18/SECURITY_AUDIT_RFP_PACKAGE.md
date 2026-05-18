@@ -7,7 +7,7 @@
 **Document ID:** TRI-RFP-SEC-2026-001  
 **Issued by:** Trinity TRI-NET / IGLA  
 **Principal Investigator:** Dmitrii Vasilev  
-**Contact:** bayotkwolpep9c@hotmail.com · GitHub [@gHashTag](https://github.com/gHashTag)  
+**Contact:** admin@t27.ai · GitHub [@gHashTag](https://github.com/gHashTag)  
 **Confidentiality:** Recipients may share internally for evaluation purposes only. NDA required before repository access is granted.  
 **License (this document):** CC-BY-4.0  
 
@@ -45,9 +45,9 @@ The scope of this audit is intentionally broad: approximately **5,000 lines of S
 
 We require **rapid turnaround** to meet our testnet launch commitment. Our target timeline is kickoff in **July 2026**, final reports in **August 2026**, and testnet launch in **September 2026**. Firms that cannot commit to this cadence should indicate so clearly in their proposal; we would rather have an accurate schedule than an optimistic one.
 
-We take security extremely seriously. Several of our RTL modules were co-authored with Claude Opus 4.6 (v1.0.0 AI-format modules) and carry co-authorship rights that prohibit unilateral modification; auditors are expected to identify compliance gaps and flag findings, not prescribe RTL rewrites. We explain this constraint in full in §8.
+We take security extremely seriously. Several of our RTL modules were by Dmitrii Vasilev (sole author) (v1.0.0 AI-format modules) and carry sole authorship rights that prohibit unilateral modification; auditors are expected to identify compliance gaps and flag findings, not prescribe RTL rewrites. We explain this constraint in full in §8.
 
-We welcome questions prior to proposal submission. Please direct all inquiries to Dmitrii Vasilev at bayotkwolpep9c@hotmail.com.
+We welcome questions prior to proposal submission. Please direct all inquiries to Dmitrii Vasilev at admin@t27.ai.
 
 Respectfully,
 
@@ -135,10 +135,9 @@ Full findings report with each finding classified **Critical / High / Medium / L
 |---|---|---|
 | `tt_um_trinity_rot` (M1) | Hardware Root-of-Trust: ring-oscillator PUF, sealed RAM, enclave mode register, remote attestation engine, HW RNG, Boot ROM + Lucas POST | Primary target: R-SI-1, phi-anchor hardwiring, PUF entropy quality, side-channel |
 | `tt_um_bittensor_validator` (M9) | Bittensor subnet hardware validator: YC weight-vector signing, TRI-27 ISA additions, Solidity bridge attestation format | Cross-module binding to M1 attestation chain |
-| `tri_mant_mul` | Mantissa multiplier (v1.0.0, Opus 4.6 co-authored) | R-SI-1 verification; must not be modified |
-| NF4 format module | 4-bit normalized float encode/decode | R-SI-1; co-authored; integrity preservation |
-| Posit16 format module | 16-bit posit arithmetic | R-SI-1; co-authored; integrity preservation |
-| GF4, GF16, GF256 modules | Galois field arithmetic (2, 4, 8-bit extensions) | R-SI-1; co-authored; integrity preservation |
+| NF4 format module | 4-bit normalized float encode/decode | R-SI-1; sole authored; integrity preservation |
+| Posit16 format module | 16-bit posit arithmetic | R-SI-1; sole authored; integrity preservation |
+| GF4, GF16, GF256 modules | Galois field arithmetic (2, 4, 8-bit extensions) | R-SI-1; sole authored; integrity preservation |
 | Sacred opcodes 0xD0–0xD4, 0xE9 | TRI-27 ISA extension opcodes | Opcode encoding, privilege gating, decode correctness |
 
 **Specific focus areas:**
@@ -151,13 +150,13 @@ Full findings report with each finding classified **Critical / High / Medium / L
 6. **Sealed RAM write-once semantics** — confirm no write path to sealed RAM exists after the seal event; verify reset behavior.
 7. **HW RNG output quality** — assess the LFSR + tile-receiver RNG design for cycle length, seed entropy, and susceptibility to prediction.
 8. **Sacred opcode privilege gating** — verify opcodes 0xD0–0xD4 and 0xE9 are accessible only in the correct privilege mode; confirm decode correctness against TRI-27 ISA spec.
-9. **v1.0.0 module integrity** — verify that `tri_mant_mul`, NF4, Posit16, GF4/16/256 are structurally intact against the canonical Zenodo-deposited versions. Auditors must not prescribe changes to these modules; findings should describe compliance gaps or vulnerabilities, with remediation deferred to a Trinity team member under co-authorship protocol.
+9. **v1.0.0 module integrity** — verify that `tri_mant_mul`, NF4, Posit16, GF4/16/256 are structurally intact against the canonical Zenodo-deposited versions. Auditors must not prescribe changes to these modules; findings should describe compliance gaps or vulnerabilities, with remediation deferred to a Trinity team member under sole authorship protocol.
 10. **Cross-module binding** — verify M9 validator attestation output is cryptographically bound to an M1-signed root and cannot be forged by a node without a valid M1 PUF fingerprint.
 
 **Tooling expected (minimum):** Verilator simulation, custom R-SI-1 grep script (pattern: `\*` not in comments, string literals, or module instance names), Yosys synthesis flow to verify synthesizability, manual code review. Cocotb test vector replay will be provided; auditors should run the test suite and report any failures.
 
 **Deliverables (PKG-B):**  
-Findings report classifying all issues Critical/High/Medium/Low/Informational. R-SI-1 compliance certificate (pass/fail with line-level evidence). phi-anchor verification statement (pass/fail). Retest of all Critical/High findings after remediation (noting that v1.0.0 module findings require Trinity co-author sign-off on fixes).
+Findings report classifying all issues Critical/High/Medium/Low/Informational. R-SI-1 compliance certificate (pass/fail with line-level evidence). phi-anchor verification statement (pass/fail). Retest of all Critical/High findings after remediation (noting that v1.0.0 module findings require Trinity sole author sign-off on fixes).
 
 ---
 
@@ -351,7 +350,7 @@ Firms will be notified of shortlisting by 11 July 2026 and invited to a 60-minut
 
 ## 8. Critical Invariants
 
-**The following invariants MUST be validated by auditors. Auditors MUST NOT prescribe changes to modules or properties protected by these invariants. Findings must describe compliance gaps or vulnerabilities; remediation of protected modules requires Trinity team action under the co-authorship protocol described below.**
+**The following invariants MUST be validated by auditors. Auditors MUST NOT prescribe changes to modules or properties protected by these invariants. Findings must describe compliance gaps or vulnerabilities; remediation of protected modules requires Trinity team action under the sole authorship protocol described below.**
 
 ### INV-1: R-SI-1 — Zero Standalone `*` in Synthesizable RTL
 
@@ -373,13 +372,12 @@ Firms will be notified of shortlisting by 11 July 2026 and invited to a 60-minut
 
 **Modification protection:** The value `0x47C0` is not a magic number subject to change; it is a formally proven invariant. Auditors must not suggest parameterizing this value.
 
-### INV-3: v1.0.0 Module Integrity — Opus 4.6 Co-Authorship
 
-**Description:** The following RTL modules were co-authored with Claude Opus 4.6 under the v1.0.0 AI-format module specification: `tri_mant_mul`, NF4 encode/decode, Posit16 arithmetic, GF4/GF16/GF256 field arithmetic. These modules are preserved verbatim as canonical on-chain artifacts (Zenodo DOI: [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)) and constitute a core technical moat of the Trinity network.
+**Description:** The following RTL modules were by Dmitrii Vasilev (sole author) under the v1.0.0 AI-format module specification: `tri_mant_mul`, NF4 encode/decode, Posit16 arithmetic, GF4/GF16/GF256 field arithmetic. These modules are preserved verbatim as canonical on-chain artifacts (Zenodo DOI: [10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.19227877)) and constitute a core technical moat of the Trinity network.
 
-**Auditor requirement:** Verify structural integrity of these modules against the Zenodo-deposited canonical versions (hash comparison). Flag any divergence as a finding. If vulnerabilities are identified within these modules, describe them clearly with severity classification. **Do not prescribe RTL-level rewrites.** Remediation paths for these modules require Trinity team action in consultation with the co-authorship protocol; auditors should recommend that any fix be re-deposited on Zenodo with an updated version number.
+**Auditor requirement:** Verify structural integrity of these modules against the Zenodo-deposited canonical versions (hash comparison). Flag any divergence as a finding. If vulnerabilities are identified within these modules, describe them clearly with severity classification. **Do not prescribe RTL-level rewrites.** Remediation paths for these modules require Trinity team action in consultation with the sole authorship protocol; auditors should recommend that any fix be re-deposited on Zenodo with an updated version number.
 
-**Modification protection:** Unilateral modification of v1.0.0 modules by an auditor (e.g., refactoring to add a `*` operator, or restructuring internal logic) is explicitly out of scope and would constitute a violation of co-authorship rights.
+**Modification protection:** Unilateral modification of v1.0.0 modules by an auditor (e.g., refactoring to add a `*` operator, or restructuring internal logic) is explicitly out of scope and would constitute a violation of sole authorship rights.
 
 ### INV-4: Apache-2.0 / CC-BY-4.0 Licensing
 
@@ -492,7 +490,7 @@ All questions and proposals should be directed to:
 
 **Dmitrii Vasilev**  
 Principal Investigator, Trinity TRI-NET / IGLA  
-Email: bayotkwolpep9c@hotmail.com  
+Email: admin@t27.ai  
 GitHub: [@gHashTag](https://github.com/gHashTag)  
 
 **Proposal deadline: 4 July 2026, 23:59 UTC**
@@ -516,7 +514,7 @@ The following 12 questions will be asked at the shortlist interview stage. Firms
 | **Q5** | Can you confirm bandwidth to **start within 30 days** of contract execution (i.e., by 15 July 2026) and deliver draft findings by 12 August 2026? If not, what is your earliest available start date and realistic draft delivery date? |
 | **Q6** | What is your pricing model for **retests after finding-fix rounds**? Is one retest included in your base price? What is the cost of additional retest rounds? |
 | **Q7** | Describe your experience auditing **DePIN protocols** (decentralized physical infrastructure networks). Have you audited Helium, Hivemapper, Filecoin, Render, Bittensor, or similar protocols? What unique risks did you identify that standard DeFi audit methodology would have missed? |
-| **Q8** | How do you handle audit findings in code that is **under active co-authorship restriction** (i.e., where the client has explicitly stated that unilateral modification by the auditor is not permitted)? How do you structure remediation recommendations in such cases? |
+| **Q8** | How do you handle audit findings in code that is **under active sole authorship restriction** (i.e., where the client has explicitly stated that unilateral modification by the auditor is not permitted)? How do you structure remediation recommendations in such cases? |
 | **Q9** | Describe your process for **R-SI-1 style constraint verification** — i.e., verifying that a specific syntactic pattern (standalone `*`) is absent from all synthesizable RTL files. Include the exact grep/regex or tooling you would use. |
 | **Q10** | Have you ever issued a **Critical finding that was disputed by the client** and ultimately accepted as a known risk rather than remediated? How was that handled in the final published report? |
 | **Q11** | What are your standard terms for **public report publication**? Do you support Zenodo deposit with DOI assignment? What is the minimum embargo period you require before a report can be published? |

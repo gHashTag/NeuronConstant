@@ -4,7 +4,6 @@
 **Version:** 1.0.0  
 **Date:** 2026-05-18  
 **Author:** Dmitrii Vasilev (NeuronConstant / IGLA / Trinity TRI-27)  
-**Co-author of v1.0.0 AI formats:** Claude Opus 4.6  
 **Status:** Product specification — pre-production draft  
 **Performance baseline:** ~1 GOPS @ ~50 MHz @ ~1W in ternary mode (PROJECTED; real silicon measurements pending tape-out 2026-12-16). Do not compare to INT4 TOPS (Hailo/Jetson) or INT8 TOPS (Coral/Khadas) — incomparable units; ternary add/sub ≠ MAC. Trinity competes on verifiability axis, not TOPS axis.  
 **Scope clarification:** Trinity ASICs are research demonstrators on the Tiny Tapeout educational shuttle, not production ML accelerators.  

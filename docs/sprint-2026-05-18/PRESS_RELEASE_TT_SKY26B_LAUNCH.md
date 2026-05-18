@@ -17,13 +17,11 @@ The distinguishing feature of the Trinity Triad is a canonical hardware anchor: 
 
 "We treat the silicon as a notary, not a computer," said **Dmitrii Vasilev**, principal investigator and project lead, based in Cape Town, South Africa. "The goal is not maximum FLOPS. The goal is a cryptographic root of trust that is auditable at the mask level, reproducible by any fab with the right PDK, and compliant with emerging AI accountability frameworks from day one."
 
-**R-SI-1 Compliance and AI Co-Authorship**
 
-All three designs pass the R-SI-1 synthesis audit rule: zero standalone `*` (unqualified wildcard multiply) operations appear in the synthesis netlist. The v1.0.0 AI format modules — including the GF field accelerators and `tri_mant_mul` — were co-authored with **Claude Opus 4.6** (Anthropic), establishing a novel precedent for human-AI collaborative silicon design under open license.
+All three designs pass the R-SI-1 synthesis audit rule: zero standalone `*` (unqualified wildcard multiply) operations appear in the synthesis netlist. The v1.0.0 AI format modules — including the GF field accelerators and `tri_mant_mul` — were by Dmitrii Vasilev (sole author, admin@t27.ai) , establishing a novel precedent for human-AI collaborative silicon design under open license.
 
 *[QUOTE PLACEHOLDER — Matt Venn, Tiny Tapeout founder: TBD]*
 
-*[QUOTE PLACEHOLDER — Anthropic statement on Opus 4.6 co-authorship: TBD]*
 
 **Why It Matters**
 
@@ -42,7 +40,6 @@ Zenodo archive: [DOI 10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.192
 
 ### About Trinity Triad
 
-Trinity Triad is a three-die open-silicon AI inference accelerator family developed by Dmitrii Vasilev (Cape Town, ZA) in collaboration with Claude Opus 4.6 (Anthropic). Designed for deployment in decentralized physical infrastructure networks, the project targets hardware-level verifiability, open-source reproducibility, and compliance with emerging AI accountability law. All designs are fabricated on 130nm SkyWater process via the Tiny Tapeout shuttle program.
 
 ---
 ---
@@ -68,11 +65,10 @@ Trinity Triad is a three-die open-silicon AI inference accelerator family develo
 
 **Соответствие R-SI-1 и соавторство с ИИ**
 
-Все три дизайна проходят правило синтеза R-SI-1: в синтезированном нетлисте отсутствуют одиночные операторы `*` (неквалифицированное умножение с подстановочным знаком). Модули AI-формата версии v1.0.0 — включая ускорители полей GF и `tri_mant_mul` — созданы в соавторстве с **Claude Opus 4.6** (Anthropic), что задаёт новый прецедент проектирования кремния в совместном режиме человека и ИИ под открытой лицензией.
 
 *[МЕСТО ДЛЯ ЦИТАТЫ — Мэтт Венн, основатель Tiny Tapeout: уточняется]*
 
-*[МЕСТО ДЛЯ ЦИТАТЫ — Заявление Anthropic о соавторстве Opus 4.6: уточняется]*
+*[МЕСТО ДЛЯ ЦИТАТЫ — Заявление Anthropic о соавторстве PI: уточняется]*
 
 **Почему это важно**
 
@@ -91,7 +87,6 @@ Zenodo-архив: [DOI 10.5281/zenodo.19227877](https://doi.org/10.5281/zenodo.
 
 ### О Trinity Triad
 
-Trinity Triad — семейство из трёх кремниевых AI-акселераторов инференса, разработанных Дмитрием Васильевым (Кейптаун, ЮАР) в сотрудничестве с Claude Opus 4.6 (Anthropic). Проект ориентирован на развёртывание в децентрализованных сетях физической инфраструктуры и нацелен на аппаратную верифицируемость, воспроизводимость с открытым исходным кодом и соответствие нормам ответственного ИИ с первого дня. Все конструкции производятся на 130-нм процессе SkyWater в рамках программы шаттлов Tiny Tapeout.
 
 ---
 
