@@ -1,0 +1,13 @@
+# Foundry build artifacts
+out/
+cache/
+broadcast/
+lib/
+
+# Secrets
+.env
+.env.local
+*.key
+
+# OS
+.DS_Store
