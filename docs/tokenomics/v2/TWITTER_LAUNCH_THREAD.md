@@ -27,7 +27,7 @@ Why 3^27?
 TRI-27, our ternary compute kernel, operates natively on balanced base-3 arithmetic.
 3^27 is the smallest power of 3 that comfortably encodes the full kernel address space.
 Supply is architecture — not tokenomics theatre.
-[WHITEPAPER_LINK]
+https://github.com/gHashTag/NeuronConstant/blob/main/docs/tokenomics/v2/TRI_TOKENOMICS_WHITEPAPER_v2.md
 #Trinity #TT
 
 *[~268 chars]*
@@ -53,7 +53,7 @@ How do you mine TRI?
 Run a TT chip. Generate a ZK proof of ternary computation.
 Submit proof on-chain. Receive TRI.
 No GPU farms. No ASIC cartels. Proof-of-Work, but the work is provably useful AI compute.
-[GITHUB_LINK]
+https://github.com/gHashTag/NeuronConstant
 #Trinity #DePIN #TT
 
 *[~254 chars]*
@@ -102,8 +102,8 @@ No hype. No inflated pre-silicon claims.
 B9 BittensorSubnetAttest is live.
 Smart contract anchors ZK ternary proofs to Bittensor subnet attestations on-chain.
 Independent verification. No trusted oracle.
-Code: [GITHUB_LINK]
-Paper: [DOI_LINK 10.5281/zenodo.19227877]
+Code: https://github.com/gHashTag/NeuronConstant
+Paper: https://doi.org/10.5281/zenodo.19227877
 #Bittensor #Trinity #DePIN
 
 *[~261 chars]*
@@ -111,29 +111,29 @@ Paper: [DOI_LINK 10.5281/zenodo.19227877]
 ---
 
 **9/**
-What's in the pipeline:
-→ Bittensor subnet integration (ternary validator nodes)
-→ DARPA-adjacent research collaborations
-→ Helium-style geographic DePIN coverage incentives
-→ Anduril defence-grade edge inference trials
-Details forthcoming as agreements are formalised.
+Pipeline:
+→ Bittensor ternary validator nodes
+→ DARPA-adjacent research collabs
+→ Helium-style geographic DePIN incentives
+→ Anduril edge-inference trials
+Details as agreements formalise.
 #DePIN #Bittensor #Trinity
 
-*[~294 chars — trim if needed]*
+*[~228 chars]*
 
 ---
 
 **10/**
 We are looking for:
-• Chip miners (early access to SKY26b hardware program)
-• Subnet validators willing to run ternary nodes
+• Chip miners (SKY26b early-access)
+• Validators running ternary nodes
 • Research & industry partners
 • Protocol contributors
-Fair launch means the network belongs to those who build it.
-DM or email admin@t27.ai
+Fair launch — the network belongs to those who build it.
+DM or admin@t27.ai
 #Trinity #DePIN #TT
 
-*[~285 chars]*
+*[~256 chars]*
 
 ---
 
@@ -151,9 +151,9 @@ Trinity Network — честный запуск ИИ-вычислений на �
 
 **12/**
 Resources:
-📄 Whitepaper: [WHITEPAPER_LINK]
-💻 Code & contracts: [GITHUB_LINK]
-🔬 DOI: [DOI_LINK 10.5281/zenodo.19227877]
+📄 Whitepaper: https://github.com/gHashTag/NeuronConstant/blob/main/docs/tokenomics/v2/TRI_TOKENOMICS_WHITEPAPER_v2.md
+💻 Code: https://github.com/gHashTag/NeuronConstant
+🔬 DOI: https://doi.org/10.5281/zenodo.19227877
 📬 Contact: admin@t27.ai
 🌐 t27.ai
 
