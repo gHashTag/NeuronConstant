@@ -1,0 +1,234 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.24;
+
+// Trinity DePIN Chip Registry — DRAFT (not compiled in CI)
+//
+// This file is a specification-grade skeleton.  Syntax is valid Solidity 0.8.x
+// but the contract is intentionally not included in the Foundry build.
+// Audit and extend before production deployment.
+//
+// See docs/registry/README.md for the full specification.
+
+contract TRIRegistry {
+    // ─── Types ───────────────────────────────────────────────────────────────
+    struct ChipRecord {
+        bytes32  serial;          // Unique chip ROM identifier
+        bytes33  pubkey;          // Compressed secp256k1 ECDSA public key
+        uint8    chipType;        // 0=phi, 1=euler, 2=gamma
+        bytes12  geoLocation;     // Geohash (right-padded to 12 bytes)
+        uint64   commissionTime;  // Unix timestamp of registration
+        uint64   lastClaim;       // Unix timestamp of last successful claim
+        uint256  totalEarned;     // Cumulative TRI minted (wei)
+        bool     slashed;         // True after bridge slash
+        address  owner;           // Original registrant (for decommission / updateLocation)
+    }
+
+    // ─── Constants ───────────────────────────────────────────────────────────
+    uint256 public constant ANTI_SYBIL_DEPOSIT = 0.01 ether;
+
+    // ─── State ───────────────────────────────────────────────────────────────
+    address public immutable bridge;
+
+    /// @notice Primary registry: serial → ChipRecord
+    mapping(bytes32 => ChipRecord) public chips;
+
+    /// @notice Security deposit per registrant chip
+    mapping(bytes32 => uint256) public deposits;
+
+    /// @notice All registered serials for enumeration
+    bytes32[] private _allSerials;
+
+    // ─── Events ──────────────────────────────────────────────────────────────
+    event ChipRegistered(
+        bytes32 indexed serial,
+        bytes33 pubkey,
+        uint8   chipType,
+        bytes12 geoHash,
+        address indexed owner
+    );
+
+    event LocationUpdated(
+        bytes32 indexed serial,
+        bytes12 oldGeoHash,
+        bytes12 newGeoHash
+    );
+
+    event ChipDecommissioned(
+        bytes32 indexed serial,
+        address indexed owner
+    );
+
+    event ChipSlashed(
+        bytes32 indexed serial
+    );
+
+    event ClaimRecorded(
+        bytes32 indexed serial,
+        uint256 amount,
+        uint256 totalEarned
+    );
+
+    // ─── Modifiers ───────────────────────────────────────────────────────────
+    modifier onlyBridge() {
+        require(msg.sender == bridge, "TRIRegistry: caller is not bridge");
+        _;
+    }
+
+    modifier onlyOwner(bytes32 serial) {
+        require(chips[serial].owner == msg.sender, "TRIRegistry: caller is not owner");
+        _;
+    }
+
+    // ─── Constructor ─────────────────────────────────────────────────────────
+    /// @param _bridge  Address of the TRIBridge contract.
+    constructor(address _bridge) {
+        require(_bridge != address(0), "TRIRegistry: bridge is zero address");
+        bridge = _bridge;
+    }
+
+    // ─── Registration ─────────────────────────────────────────────────────────
+    /// @notice Register a new Trinity Triad chip.
+    /// @param serial    Chip ROM serial number (bytes32).
+    /// @param pubkey    Compressed ECDSA public key (bytes33).
+    /// @param chipType  0=phi, 1=euler, 2=gamma.
+    /// @param geoHash   Geohash (up to 12 ASCII chars, right-padded with 0x00).
+    function registerChip(
+        bytes32 serial,
+        bytes33 pubkey,
+        uint8   chipType,
+        bytes12 geoHash
+    ) external payable {
+        require(msg.value == ANTI_SYBIL_DEPOSIT, "TRIRegistry: wrong deposit amount");
+        require(chips[serial].commissionTime == 0, "TRIRegistry: already registered");
+        require(chipType <= 2, "TRIRegistry: unknown chipType");
+        require(pubkey[0] == 0x02 || pubkey[0] == 0x03, "TRIRegistry: invalid compressed pubkey prefix");
+
+        chips[serial] = ChipRecord({
+            serial:         serial,
+            pubkey:         pubkey,
+            chipType:       chipType,
+            geoLocation:    geoHash,
+            commissionTime: uint64(block.timestamp),
+            lastClaim:      0,
+            totalEarned:    0,
+            slashed:        false,
+            owner:          msg.sender
+        });
+
+        deposits[serial] = msg.value;
+        _allSerials.push(serial);
+
+        emit ChipRegistered(serial, pubkey, chipType, geoHash, msg.sender);
+    }
+
+    // ─── Location update ──────────────────────────────────────────────────────
+    /// @notice Update the geolocation of a registered chip.
+    function updateGeo(bytes32 serial, bytes12 newGeoHash)
+        external
+        onlyOwner(serial)
+    {
+        require(chips[serial].commissionTime != 0, "TRIRegistry: chip not registered");
+        require(!chips[serial].slashed, "TRIRegistry: chip is slashed");
+
+        bytes12 old = chips[serial].geoLocation;
+        chips[serial].geoLocation = newGeoHash;
+
+        emit LocationUpdated(serial, old, newGeoHash);
+    }
+
+    // ─── Decommission ─────────────────────────────────────────────────────────
+    /// @notice Remove a chip from the active registry and reclaim the deposit.
+    function decommission(bytes32 serial) external onlyOwner(serial) {
+        require(chips[serial].commissionTime != 0, "TRIRegistry: chip not registered");
+        require(!chips[serial].slashed, "TRIRegistry: slashed chip cannot be decommissioned");
+
+        uint256 refund = deposits[serial];
+        deposits[serial] = 0;
+        chips[serial].commissionTime = 0; // mark inactive
+
+        // Refund deposit
+        (bool ok, ) = msg.sender.call{value: refund}("");
+        require(ok, "TRIRegistry: refund failed");
+
+        emit ChipDecommissioned(serial, msg.sender);
+    }
+
+    // ─── Bridge-controlled operations ────────────────────────────────────────
+    /// @notice Mark a chip as slashed (forfeits deposit).
+    function slashChip(bytes32 serial) external onlyBridge {
+        require(chips[serial].commissionTime != 0, "TRIRegistry: chip not found");
+        require(!chips[serial].slashed, "TRIRegistry: already slashed");
+        chips[serial].slashed = true;
+        // Deposit is forfeited; could be sent to a slashing pool
+        // deposits[serial] remains non-zero to indicate forfeiture
+        emit ChipSlashed(serial);
+    }
+
+    /// @notice Update claim statistics after a successful bridge claim.
+    function recordClaim(bytes32 serial, uint256 amount) external onlyBridge {
+        require(chips[serial].commissionTime != 0, "TRIRegistry: chip not found");
+        chips[serial].lastClaim   = uint64(block.timestamp);
+        chips[serial].totalEarned += amount;
+        emit ClaimRecorded(serial, amount, chips[serial].totalEarned);
+    }
+
+    // ─── Discovery view functions ─────────────────────────────────────────────
+    /// @notice Return all chip serials whose geoLocation starts with `geoPrefix`.
+    /// @param geoPrefix  First 4 bytes of a geohash (~40 km radius).
+    function getChipsByGeo(bytes4 geoPrefix) external view returns (bytes32[] memory) {
+        uint256 count;
+        for (uint256 i = 0; i < _allSerials.length; i++) {
+            if (_geoMatches(_allSerials[i], geoPrefix)) count++;
+        }
+        bytes32[] memory result = new bytes32[](count);
+        uint256 idx;
+        for (uint256 i = 0; i < _allSerials.length; i++) {
+            if (_geoMatches(_allSerials[i], geoPrefix)) {
+                result[idx++] = _allSerials[i];
+            }
+        }
+        return result;
+    }
+
+    /// @notice Return all chip serials of a given type.
+    function getChipsByType(uint8 chipType) external view returns (bytes32[] memory) {
+        uint256 count;
+        for (uint256 i = 0; i < _allSerials.length; i++) {
+            if (chips[_allSerials[i]].chipType == chipType &&
+                chips[_allSerials[i]].commissionTime != 0) count++;
+        }
+        bytes32[] memory result = new bytes32[](count);
+        uint256 idx;
+        for (uint256 i = 0; i < _allSerials.length; i++) {
+            bytes32 s = _allSerials[i];
+            if (chips[s].chipType == chipType && chips[s].commissionTime != 0) {
+                result[idx++] = s;
+            }
+        }
+        return result;
+    }
+
+    /// @notice Count chips that are active (registered and not slashed).
+    function totalActive() external view returns (uint256 count) {
+        for (uint256 i = 0; i < _allSerials.length; i++) {
+            bytes32 s = _allSerials[i];
+            if (chips[s].commissionTime != 0 && !chips[s].slashed) count++;
+        }
+    }
+
+    /// @notice Return the full record for a chip serial.
+    function getChip(bytes32 serial) external view returns (ChipRecord memory) {
+        return chips[serial];
+    }
+
+    // ─── Internal helpers ────────────────────────────────────────────────────
+    function _geoMatches(bytes32 serial, bytes4 prefix) internal view returns (bool) {
+        bytes12 geo = chips[serial].geoLocation;
+        return bytes4(geo) == prefix &&
+               chips[serial].commissionTime != 0 &&
+               !chips[serial].slashed;
+    }
+
+    // ─── Receive (accept anti-Sybil deposits) ────────────────────────────────
+    receive() external payable {}
+}
